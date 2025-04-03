@@ -20,7 +20,6 @@ const Navbar = ({ setScene }) => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
           maxWidth: "100%",
           margin: "0 auto",
         }}
@@ -45,8 +44,6 @@ const Navbar = ({ setScene }) => {
                 fontSize: "1rem",
                 fontWeight: "bold",
                 cursor: "pointer",
-                textDecoration: "none",
-                paddingInline: "1rem",
               }}
             >
               Foodstore
@@ -61,7 +58,6 @@ const Navbar = ({ setScene }) => {
                 color: "#94a3b8",
                 fontSize: "1rem",
                 cursor: "pointer",
-                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
@@ -78,7 +74,6 @@ const Navbar = ({ setScene }) => {
                 color: "#94a3b8",
                 fontSize: "1rem",
                 cursor: "pointer",
-                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
@@ -95,7 +90,6 @@ const Navbar = ({ setScene }) => {
                 color: "#94a3b8",
                 fontSize: "1rem",
                 cursor: "pointer",
-                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
@@ -177,7 +171,6 @@ const Navbar = ({ setScene }) => {
                 color: "#94a3b8",
                 fontSize: "1rem",
                 cursor: "pointer",
-                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
