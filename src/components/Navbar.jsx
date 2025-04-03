@@ -21,21 +21,10 @@ const Navbar = ({ setScene }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          maxWidth: "1200px",
+          maxWidth: "100%",
           margin: "0 auto",
         }}
       >
-        <h1
-          style={{
-            color: "white",
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            cursor: "default",
-          }}
-        >
-          Foodstore
-        </h1>
-
         <ul
           style={{
             display: "flex",
@@ -43,8 +32,26 @@ const Navbar = ({ setScene }) => {
             listStyle: "none",
             margin: 0,
             padding: 0,
+            justifyContent: "center",
+            flexGrow: 1,
           }}
         >
+          <li>
+            <button
+              style={{
+                background: "none",
+                border: "none",
+                color: "white",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecoration: "none",
+                paddingInline: "1rem",
+              }}
+            >
+              Foodstore
+            </button>
+          </li>
           <li>
             <button
               onClick={() => setScene("home")}
@@ -55,7 +62,6 @@ const Navbar = ({ setScene }) => {
                 fontSize: "1rem",
                 cursor: "pointer",
                 textDecoration: "none",
-                transition: "text-decoration 0.2s ease-in-out",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
@@ -73,7 +79,6 @@ const Navbar = ({ setScene }) => {
                 fontSize: "1rem",
                 cursor: "pointer",
                 textDecoration: "none",
-                transition: "text-decoration 0.2s ease-in-out",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
@@ -173,7 +178,6 @@ const Navbar = ({ setScene }) => {
                 fontSize: "1rem",
                 cursor: "pointer",
                 textDecoration: "none",
-                transition: "text-decoration 0.2s ease-in-out",
               }}
               onMouseEnter={(e) => (e.target.style.color = "#60a5fa")}
               onMouseLeave={(e) => (e.target.style.color = "#94a3b8")}
