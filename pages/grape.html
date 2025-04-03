@@ -35,7 +35,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="/index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/pages/about.html">About</a>
@@ -47,7 +47,7 @@
             </li>
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link dropdown-toggle active"
                 href="#"
                 id="navbarDropdown"
                 role="button"
@@ -60,7 +60,7 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/pages/banana.html">Banana</a>
                 <a class="dropdown-item" href="/pages/cherry.html">Cherry</a>
-                <a class="dropdown-item" href="/pages/grape.html">Grape</a>
+                <a class="dropdown-item active" href="#">Grape</a>
               </div>
             </li>
             <li class="nav-item">
@@ -72,68 +72,12 @@
         </div>
       </nav>
 
-      <div class="card-body"></div>
-
-      <!-- Container for the cards -->
+      <!-- for three.js -->
       <div
         id="three-container"
-        class="flex-grow-1 d-flex justify-content-center position-relative"
+        class="flex-grow-1 d-flex justify-content-center align-items-center"
       >
-        <div
-          style="
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            gap: 10px;
-            padding-left: 10px;
-            padding-bottom: 10px;
-          "
-        >
-          <div class="card" style="width: 18rem">
-            <div class="card-body">
-              <h5 class="card-title">Banana Model</h5>
-              <p class="card-text">View the banana model by itself.</p>
-              <a href="/pages/banana.html" class="btn btn-primary"
-                >Go to Banana</a
-              >
-            </div>
-          </div>
-
-          <div class="card" style="width: 18rem">
-            <div class="card-body">
-              <h5 class="card-title">Cherry Model</h5>
-              <p class="card-text">View the cherry model by itself.</p>
-              <a href="/pages/cherry.html" class="btn btn-primary"
-                >Go to Cherry</a
-              >
-            </div>
-          </div>
-
-          <div class="card" style="width: 18rem">
-            <div class="card-body">
-              <h5 class="card-title">Grape Model</h5>
-              <p class="card-text">View the grape model by itself.</p>
-              <a href="/pages/grape.html" class="btn btn-primary"
-                >Go to Grape</a
-              >
-            </div>
-          </div>
-        </div>
-
-        <script type="module" src="/main.js"></script>
-
-        <div class="position-absolute top-0 start-0 p-3">
-          <button type="button" class="btn btn-primary" id="btnOpenFridge">
-            OPEN FRIDGE
-          </button>
-          <button type="button" class="btn btn-primary" id="btnCloseFridge">
-            CLOSE FRIDGE
-          </button>
-          <button type="button" class="btn btn-primary" id="btnToggleWireframe">
-            TOGGLE WIREFRAME
-          </button>
-        </div>
+        <script type="module" src="/pages/grape.js" defer></script>
       </div>
 
       <!-- for footer -->
@@ -151,7 +95,9 @@
               <h5 class="text-uppercase">Quick Links</h5>
               <ul class="list-unstyled">
                 <li>
-                  <a href="#" class="text-white text-decoration-none">Home</a>
+                  <a href="/index.html" class="text-white text-decoration-none"
+                    >Home</a
+                  >
                 </li>
                 <li>
                   <a
@@ -171,6 +117,8 @@
             </div>
           </div>
         </div>
+
+        <!-- Copyright Section -->
         <div class="text-center p-3">Cand. No: 262880</div>
       </footer>
     </div>
