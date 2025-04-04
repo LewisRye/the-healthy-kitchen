@@ -164,21 +164,20 @@ loader.load(
 // open fridge button
 document.getElementById("btnOpenFridge").addEventListener("click", function () {
   if (fridgeActions.length > 0 && !fridgeOpen) {
-      for (let action of fridgeActions) {
-        // play until frame 40 (fully open)
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.timeScale = 1;
-        action.reset();
-        action.play();
+    for (let action of fridgeActions) {
+      action.reset();
+      action.setLoop(THREE.LoopOnce);
+      action.clampWhenFinished = true;
+      action.timeScale = 1;
+      action.play();
 
-        action.onFinish = () => {
-          action.time = 40;
-          action.paused = true;
-        };
-      }
-      fridgeOpen = true;
+      setTimeout(() => {
+        action.paused = true;
+        action.time = 1.33;
+      }, 1330);
     }
+    fridgeOpen = true;
+  }
 });
 
 // close fridge button
@@ -186,14 +185,21 @@ document
   .getElementById("btnCloseFridge")
   .addEventListener("click", function () {
     if (fridgeActions.length > 0 && fridgeOpen) {
-        for (let action of fridgeActions) {
-          // play from frame 40 until frame 80 (fully closed)
-          action.time = 40;
-          action.timeScale = -1;
-          action.play();
-        }
-        fridgeOpen = false;
+      for (let action of fridgeActions) {
+        action.reset();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+        action.timeScale = 1;
+        action.time = 40/30;
+        action.play();
+  
+        setTimeout(() => {
+          action.paused = true;
+          action.time = 0;
+        }, 1330);
       }
+      fridgeOpen = false;
+    }
   });
 
 // toggle wireframe button
