@@ -163,10 +163,7 @@ loader.load(
 
 // open fridge button
 document.getElementById("btnOpenFridge").addEventListener("click", function () {
-  console.log("Clicked open button");
-
-  if (fridgeActions.length > 0) {
-    if (!fridgeOpen) {
+  if (fridgeActions.length > 0 && !fridgeOpen) {
       for (let action of fridgeActions) {
         // play until frame 40 (fully open)
         action.setLoop(THREE.LoopOnce);
@@ -182,17 +179,13 @@ document.getElementById("btnOpenFridge").addEventListener("click", function () {
       }
       fridgeOpen = true;
     }
-  }
 });
 
 // close fridge button
 document
   .getElementById("btnCloseFridge")
   .addEventListener("click", function () {
-    console.log("clicked close button");
-
-    if (fridgeActions.length > 0) {
-      if (fridgeOpen) {
+    if (fridgeActions.length > 0 && fridgeOpen) {
         for (let action of fridgeActions) {
           // play from frame 40 until frame 80 (fully closed)
           action.time = 40;
@@ -201,7 +194,6 @@ document
         }
         fridgeOpen = false;
       }
-    }
   });
 
 // toggle wireframe button
@@ -220,18 +212,13 @@ document
 clock = new THREE.Clock();
 
 function animate() {
-  if (fridgeMixer) {
-    fridgeMixer.update(clock.getDelta());
-  }
-  if (bananaMixer) {
-    bananaMixer.update(clock.getDelta());
-  }
-  if (cherryMixer) {
-    cherryMixer.update(clock.getDelta());
-  }
-  if (grapeMixer) {
-    grapeMixer.update(clock.getDelta());
-  }
+  const delta = clock.getDelta();
+
+  if (fridgeMixer) fridgeMixer.update(delta);
+  if (bananaMixer) bananaMixer.update(delta);
+  if (cherryMixer) cherryMixer.update(delta);
+  if (grapeMixer) grapeMixer.update(delta);
+
   renderer.render(scene, camera);
 }
 
