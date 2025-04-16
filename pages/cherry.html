@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Foodstore</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- for navbar -->
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><strong>Foodstore</strong></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarText"
+          aria-controls="navbarText"
+          aria-expanded="False"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/statement.html"
+                >Statement of Originality</a
+              >
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Models
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/pages/banana.html">Banana</a>
+                <a class="dropdown-item active" href="#">Cherry</a>
+                <a class="dropdown-item" href="/pages/grape.html">Grape</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true"
+                >Cand. No: 262880</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- for three.js -->
+      <div
+        id="three-container"
+        class="flex-grow-1 d-flex justify-content-center align-items-center"
+      >
+        <script type="module" src="/pages/cherry.js" defer></script>
+      </div>
+
+      <!-- for footer -->
+      <footer class="bg-dark text-white text-center text-lg-start mt-4">
+        <div class="container p-4">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+              <h5 class="text-uppercase">Foodstore</h5>
+              <p>
+                A coursework submission for the 'Web 3D Applications' module.
+              </p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+              <h5 class="text-uppercase">Quick Links</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="/index.html" class="text-white text-decoration-none"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/pages/about.html"
+                    class="text-white text-decoration-none"
+                    >About</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/pages/statement.html"
+                    class="text-white text-decoration-none"
+                    >Statement of Originality</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="text-center p-3">Cand. No: 262880</div>
+      </footer>
+    </div>
+
+    <!-- for bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
