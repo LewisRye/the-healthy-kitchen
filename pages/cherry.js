@@ -11,11 +11,20 @@ const camera = new THREE.PerspectiveCamera(
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x87ceeb);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 const container = document.getElementById("three-container");
 container.appendChild(renderer.domElement);
 
-const light = new THREE.AmbientLight(0xffffff, 1);
-scene.add(light);
+// add lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
+
+const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+sunLight.position.set(-5, 2.5, 5);
+scene.add(sunLight);
 
 let cherry;
 
@@ -24,6 +33,7 @@ loader.load(
   "/models/cherry.gltf",
   function (gltf) {
     cherry = gltf.scene;
+    cherry.scale.set(25, 25, 25);
     scene.add(cherry);
   },
   undefined,
@@ -49,7 +59,7 @@ document
 
 function animate() {
   if (cherry) {
-    cherry.rotation.y += 0.01;
+    cherry.rotation.y += 0.005;
   }
 
   renderer.render(scene, camera);

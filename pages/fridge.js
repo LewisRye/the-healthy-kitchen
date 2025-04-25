@@ -26,15 +26,15 @@ const sunLight = new THREE.DirectionalLight(0xffffff, 1);
 sunLight.position.set(-5, 2.5, 5);
 scene.add(sunLight);
 
-let grape;
+let fridge;
 
 const loader = new GLTFLoader();
 loader.load(
-  "/models/grape.gltf",
+  "/models/fridge.glb",
   function (gltf) {
-    grape = gltf.scene;
-    grape.scale.set(10, 10, 10);
-    scene.add(grape);
+    fridge = gltf.scene;
+    fridge.scale.set(50, 50, 50);
+    scene.add(fridge);
   },
   undefined,
   function (error) {
@@ -58,8 +58,8 @@ document
   });
 
 function animate() {
-  if (grape) {
-    grape.rotation.y += 0.005;
+  if (fridge) {
+    fridge.rotation.y += 0.005;
   }
 
   renderer.render(scene, camera);

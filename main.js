@@ -17,7 +17,7 @@ let lightOn = false;
 
 scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(
-  75,
+  60,
   window.innerWidth / (window.innerHeight * 0.8),
   0.1,
   10000
@@ -26,13 +26,13 @@ renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight * 0.8);
 renderer.setClearColor(0x87ceeb);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: softer shadows
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const container = document.getElementById("three-container");
 container.appendChild(renderer.domElement);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
-camera.position.set(-5, 5, 5);
+camera.position.set(-5, 2.75, 7.5);
 orbit.update();
 
 // add lighting
@@ -40,7 +40,7 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambientLight);
 
 const sunLight = new THREE.DirectionalLight(0xffffff, 1);
-sunLight.position.set(-500, 500, 500);
+sunLight.position.set(-5, 2.5, 5);
 scene.add(sunLight);
 
 const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
@@ -57,39 +57,47 @@ fridgeBottomLight.position.set(0, 2.5, -4);
 fridgeBottomLight.intensity = 0;
 scene.add(fridgeBottomLight);
 
-// add floor
 const textureLoader = new THREE.TextureLoader();
+
+// add floor
 const floorTexture = textureLoader.load(
   "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/granite_tile/granite_tile_rough_1k.png"
 );
 floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 floorTexture.repeat.set(2, 2);
 const floorGeometry = new THREE.PlaneGeometry(10, 10);
-const floorMaterial = new THREE.MeshLambertMaterial({
+const floorMaterial = new THREE.MeshStandardMaterial({
   map: floorTexture,
 });
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
 
+// add wall texture
+const wallTexture = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/long_white_tiles/long_white_tiles_rough_1k.png"
+);
+wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+wallTexture.repeat.set(2, 2);
+const wallGeometry = new THREE.PlaneGeometry(10, 5);
+const wallMaterial = new THREE.MeshStandardMaterial({
+  map: wallTexture,
+});
+
 // add back wall
-const backWallGeometry = new THREE.PlaneGeometry(10, 5);
-const backWallMaterial = new THREE.MeshLambertMaterial({ color: 0xedeae2 });
-const backWall = new THREE.Mesh(backWallGeometry, backWallMaterial);
+const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
 backWall.position.set(0, 2.5, -5);
 scene.add(backWall);
 
 // add right wall
-const rightWallGeometry = new THREE.PlaneGeometry(10, 5);
-const rightWallMaterial = new THREE.MeshLambertMaterial({ color: 0xedeae2 });
-const rightWall = new THREE.Mesh(rightWallGeometry, rightWallMaterial);
+const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
 rightWall.position.set(5, 2.5, 0);
 rightWall.rotation.y = -Math.PI / 2;
 scene.add(rightWall);
 
 // add door to right wall
 const boxDoorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
-const boxDoorMaterial = new THREE.MeshLambertMaterial({ color: 0x90828e });
+const boxDoorMaterial = new THREE.MeshStandardMaterial({ color: 0x90828e });
 const boxDoor = new THREE.Mesh(boxDoorGeometry, boxDoorMaterial);
 boxDoor.position.set(4.95, 1.5, 2.5);
 boxDoor.rotation.y = -Math.PI / 2;
@@ -97,7 +105,7 @@ scene.add(boxDoor);
 
 // add handle to door
 const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 32);
-const handleMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
+const handleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
 const handle = new THREE.Mesh(handleGeometry, handleMaterial);
 handle.rotation.z = Math.PI / 2;
 handle.position.set(4.85, 1.5, 2);
@@ -105,7 +113,7 @@ scene.add(handle);
 
 // add light switch
 const toggleGeometry = new THREE.BoxGeometry(0.75, 0.5, 0.5);
-const toggleMaterial = new THREE.MeshLambertMaterial({ color: 0x111111 });
+const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x111111 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
 lightSwitch.rotation.z = -20; // -20 for off, 20 for on
 lightSwitch.position.set(5, 1.75, 1);
@@ -285,8 +293,8 @@ function onMouseClick(event) {
     fridgeMesh.includes(fridgeIntersect[0].object)
   ) {
     if (fridgeActions.length > 0 && fridgeOpen) {
-      animateIntensity(fridgeTopLight, 1, 0, 500);
-      animateIntensity(fridgeBottomLight, 1, 0, 500);
+      animateIntensity(fridgeTopLight, 2, 0, 2000);
+      animateIntensity(fridgeBottomLight, 2, 0, 2000);
 
       for (let action of fridgeActions) {
         action.reset();
@@ -303,8 +311,8 @@ function onMouseClick(event) {
       }
       fridgeOpen = false;
     } else if (fridgeActions.length > 0 && !fridgeOpen) {
-      animateIntensity(fridgeTopLight, 0, 1, 500);
-      animateIntensity(fridgeBottomLight, 0, 1, 500);
+      animateIntensity(fridgeTopLight, 0, 2, 1000);
+      animateIntensity(fridgeBottomLight, 0, 2, 1000);
 
       for (let action of fridgeActions) {
         action.reset();
@@ -332,11 +340,11 @@ function onMouseClick(event) {
     lightSwitch.rotation.z = -lightSwitch.rotation.z;
 
     if (lightOn) {
-      animateBackgroundColor(0x87ceeb, 0x070b34, 1000);
+      animateBackgroundColor(0x87ceeb, 0x070b34, 500);
       animateIntensity(sunLight, 1, 0, 500);
       animateIntensity(pointLight, 0, 50, 500);
     } else {
-      animateBackgroundColor(0x070b34, 0x87ceeb, 1000);
+      animateBackgroundColor(0x070b34, 0x87ceeb, 500);
       animateIntensity(sunLight, 0, 1, 500);
       animateIntensity(pointLight, 50, 0, 500);
     }
