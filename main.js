@@ -95,22 +95,19 @@ const toggleMaterial = new THREE.MeshLambertMaterial({ color: 0x111111 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
 lightSwitch.rotation.z = -20; // -20 for off, 20 for on
 lightSwitch.position.set(5, 1.75, 3.5);
+const switchMesh = [];
+lightSwitch.traverse(function (child) {
+  if (child.isMesh) {
+    switchMesh.push(child);
+  }
+});
 scene.add(lightSwitch);
 
 // load all models
+const loader = new GLTFLoader();
+
 let fridge;
 const fridgeMesh = [];
-
-let banana;
-const bananaMesh = [];
-
-let cherry;
-const cherryMesh = [];
-
-let grape;
-const grapeMesh = [];
-
-const loader = new GLTFLoader();
 loader.load(
   "/models/fridge.glb",
   function (gltf) {
@@ -137,6 +134,9 @@ loader.load(
     console.error(error);
   }
 );
+
+let banana;
+const bananaMesh = [];
 loader.load(
   "/models/banana.gltf",
   function (gltf) {
@@ -166,6 +166,9 @@ loader.load(
     console.error(error);
   }
 );
+
+let cherry;
+const cherryMesh = [];
 loader.load(
   "/models/cherry.gltf",
   function (gltf) {
@@ -194,6 +197,9 @@ loader.load(
     console.error(error);
   }
 );
+
+let grape;
+const grapeMesh = [];
 loader.load(
   "/models/grape.gltf",
   function (gltf) {
@@ -249,12 +255,11 @@ function onMouseClick(event) {
 
   raycaster.setFromCamera(pointer, camera);
 
-  const allIntersects = getIntersections(pointer);
-
+  const fridgeIntersect = raycaster.intersectObject(fridge, true);
   // fridge clicked
   if (
-    allIntersects.length > 0 &&
-    fridgeMesh.includes(allIntersects[0].object)
+    fridgeIntersect.length > 0 &&
+    fridgeMesh.includes(fridgeIntersect[0].object)
   ) {
     if (fridgeActions.length > 0 && fridgeOpen) {
       for (let action of fridgeActions) {
@@ -288,10 +293,12 @@ function onMouseClick(event) {
     }
   }
 
-  const lightSwitchIntersects = raycaster.intersectObject(lightSwitch);
-
+  const switchIntersect = raycaster.intersectObject(lightSwitch, true);
   // light switch clicked
-  if (lightSwitchIntersects.length > 0) {
+  if (
+    switchIntersect.length > 0 &&
+    switchMesh.includes(switchIntersect[0].object)
+  ) {
     lightOn = !lightOn;
     lightSwitch.rotation.z = -lightSwitch.rotation.z;
 
@@ -301,11 +308,6 @@ function onMouseClick(event) {
       renderer.setClearColor(0x87ceeb);
     }
   }
-}
-
-function getIntersections(pointer) {
-  raycaster.setFromCamera(pointer, camera);
-  return raycaster.intersectObject(fridge, true);
 }
 
 window.addEventListener("resize", () => {
