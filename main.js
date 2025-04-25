@@ -60,28 +60,58 @@ scene.add(fridgeBottomLight);
 const textureLoader = new THREE.TextureLoader();
 
 // add floor
-const floorTexture = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/granite_tile/granite_tile_rough_1k.png"
+const floorGeometry = new THREE.BoxGeometry(10, 10, 0.01);
+
+const floorDiffuse = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_diff_1k.jpg"
 );
-floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-floorTexture.repeat.set(2, 2);
-const floorGeometry = new THREE.PlaneGeometry(10, 10);
+floorDiffuse.wrapS = floorDiffuse.wrapT = THREE.RepeatWrapping;
+
+const floorNormal = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_nor_gl_1k.jpg"
+);
+floorNormal.wrapS = floorNormal.wrapT = THREE.RepeatWrapping;
+
+const floorRoughness = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_rough_1k.jpg"
+);
+floorRoughness.wrapS = floorRoughness.wrapT = THREE.RepeatWrapping;
+
 const floorMaterial = new THREE.MeshStandardMaterial({
-  map: floorTexture,
+  map: floorDiffuse,
+  normalMap: floorNormal,
+  roughnessMap: floorRoughness,
 });
+
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
 
 // add wall texture
-const wallTexture = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/long_white_tiles/long_white_tiles_rough_1k.png"
+const wallGeometry = new THREE.BoxGeometry(10, 5, 0.01);
+
+const wallDiffuse = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_diff_1k.jpg"
 );
-wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
-wallTexture.repeat.set(2, 2);
-const wallGeometry = new THREE.PlaneGeometry(10, 5);
+wallDiffuse.wrapS = wallDiffuse.wrapT = THREE.RepeatWrapping;
+wallDiffuse.repeat.set(2, 1);
+
+const wallNormal = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_nor_gl_1k.jpg"
+);
+wallNormal.wrapS = wallNormal.wrapT = THREE.RepeatWrapping;
+wallNormal.repeat.set(2, 1);
+
+const wallRoughness = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_rough_1k.jpg"
+);
+wallRoughness.wrapS = wallRoughness.wrapT = THREE.RepeatWrapping;
+wallRoughness.repeat.set(2, 1);
+
 const wallMaterial = new THREE.MeshStandardMaterial({
-  map: wallTexture,
+  map: wallDiffuse,
+  normalMap: wallNormal,
+  roughnessMap: wallRoughness,
 });
 
 // add back wall
@@ -96,12 +126,33 @@ rightWall.rotation.y = -Math.PI / 2;
 scene.add(rightWall);
 
 // add door to right wall
-const boxDoorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
-const boxDoorMaterial = new THREE.MeshStandardMaterial({ color: 0x90828e });
-const boxDoor = new THREE.Mesh(boxDoorGeometry, boxDoorMaterial);
-boxDoor.position.set(4.95, 1.5, 2.5);
-boxDoor.rotation.y = -Math.PI / 2;
-scene.add(boxDoor);
+const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
+
+const doorDiffuse = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_diff_1k.jpg"
+);
+doorDiffuse.wrapS = doorDiffuse.wrapT = THREE.RepeatWrapping;
+
+const doorNormal = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_nor_gl_1k.jpg"
+);
+doorNormal.wrapS = doorNormal.wrapT = THREE.RepeatWrapping;
+
+const doorRoughness = textureLoader.load(
+  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_rough_1k.jpg"
+);
+doorRoughness.wrapS = doorRoughness.wrapT = THREE.RepeatWrapping;
+
+const doorMaterial = new THREE.MeshStandardMaterial({
+  map: doorDiffuse,
+  normalMap: doorNormal,
+  roughnessMap: doorRoughness,
+});
+
+const door = new THREE.Mesh(doorGeometry, doorMaterial);
+door.position.set(4.95, 1.5, 2.5);
+door.rotation.y = -Math.PI / 2;
+scene.add(door);
 
 // add handle to door
 const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 32);
