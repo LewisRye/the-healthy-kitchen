@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-var scene,
+let scene,
   camera,
   renderer,
   fridgeMixer,
@@ -12,9 +12,8 @@ var scene,
   cherryMixer,
   grapeMixer;
 
-var fridgeOpen = false;
-var lightOn = false;
-var wireframe = false;
+let fridgeOpen = false;
+let lightOn = false;
 
 scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(
@@ -230,6 +229,7 @@ loader.load(
 );
 
 // toggle wireframe button
+let wireframe = false;
 document
   .getElementById("btnToggleWireframe")
   .addEventListener("click", function () {
@@ -312,8 +312,8 @@ function onMouseClick(event) {
 
 window.addEventListener("resize", () => {
   // resize camera to allow for new window size
-  var width = window.innerWidth;
-  var height = window.innerHeight * 0.8;
+  let width = window.innerWidth;
+  let height = window.innerHeight * 0.8;
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();

@@ -34,6 +34,19 @@ loader.load(
 
 camera.position.z = 150;
 
+// toggle wireframe button
+let wireframe = false;
+document
+  .getElementById("btnToggleWireframe")
+  .addEventListener("click", function () {
+    wireframe = !wireframe;
+    scene.traverse(function (object) {
+      if (object.isMesh) {
+        object.material.wireframe = wireframe;
+      }
+    });
+  });
+
 function animate() {
   if (banana) {
     banana.rotation.y += 0.01;
