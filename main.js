@@ -174,7 +174,7 @@ document.getElementById("btnOpenFridge").addEventListener("click", function () {
       setTimeout(() => {
         action.paused = true;
         action.time = 1.33;
-      }, 1330);
+      }, 1900);
     }
     fridgeOpen = true;
   }
@@ -190,13 +190,13 @@ document
         action.setLoop(THREE.LoopOnce);
         action.clampWhenFinished = true;
         action.timeScale = 1;
-        action.time = 40/30;
+        action.time = 40 / 30;
         action.play();
-  
+
         setTimeout(() => {
           action.paused = true;
           action.time = 0;
-        }, 1330);
+        }, 2000);
       }
       fridgeOpen = false;
     }

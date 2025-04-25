@@ -21,7 +21,7 @@ let banana;
 
 const loader = new GLTFLoader();
 loader.load(
-  "/models/Banana.gltf",
+  "/models/banana.gltf",
   function (gltf) {
     banana = gltf.scene;
     scene.add(banana);

@@ -21,7 +21,7 @@ let cherry;
 
 const loader = new GLTFLoader();
 loader.load(
-  "/models/Cherry.gltf",
+  "/models/cherry.gltf",
   function (gltf) {
     cherry = gltf.scene;
     scene.add(cherry);

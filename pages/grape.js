@@ -21,7 +21,7 @@ let grape;
 
 const loader = new GLTFLoader();
 loader.load(
-  "/models/Grape.gltf",
+  "/models/grape.gltf",
   function (gltf) {
     grape = gltf.scene;
     scene.add(grape);
