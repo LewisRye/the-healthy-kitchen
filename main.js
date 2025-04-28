@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -49,22 +48,22 @@ orbit.update();
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambientLight);
 
-const sunLight = new THREE.DirectionalLight(0xffffff, 1, 1000);
-sunLight.position.set(-5, 2.5, 5);
+const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+sunLight.position.set(-2.5, 10, 2.5);
 sunLight.castShadow = true;
 scene.add(sunLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 0, 1000);
+const pointLight = new THREE.PointLight(0xffffff, 0);
 pointLight.position.set(0, 5, 0);
 pointLight.castShadow = true;
 scene.add(pointLight);
 
-const fridgeTopLight = new THREE.PointLight(0xffffff, 1, 5);
+const fridgeTopLight = new THREE.PointLight(0xffffff, 1);
 fridgeTopLight.position.set(0, 1.3, -4);
 fridgeTopLight.intensity = 0;
 scene.add(fridgeTopLight);
 
-const fridgeBottomLight = new THREE.PointLight(0xffffff, 1, 5);
+const fridgeBottomLight = new THREE.PointLight(0xffffff, 1);
 fridgeBottomLight.position.set(0, 2.5, -4);
 fridgeBottomLight.intensity = 0;
 scene.add(fridgeBottomLight);
@@ -73,13 +72,7 @@ const textureLoader = new THREE.TextureLoader();
 
 // add floor
 const floorGeometry = new THREE.BoxGeometry(10, 10, 0.05);
-const floorDiffuse = new THREE.Texture();
-const floorNormal = new THREE.Texture();
-const floorRoughness = new THREE.Texture();
 const floorMaterial = new THREE.MeshStandardMaterial({
-  map: floorDiffuse,
-  normalMap: floorNormal,
-  roughnessMap: floorRoughness,
   roughness: 0.75,
   metalness: 0.25,
 });
@@ -90,13 +83,7 @@ scene.add(floor);
 
 // add wall texture
 const wallGeometry = new THREE.BoxGeometry(10, 5, 0.05);
-const wallDiffuse = new THREE.Texture();
-const wallNormal = new THREE.Texture();
-const wallRoughness = new THREE.Texture();
 const wallMaterial = new THREE.MeshStandardMaterial({
-  map: wallDiffuse,
-  normalMap: wallNormal,
-  roughnessMap: wallRoughness,
   roughness: 0.75,
   metalness: 0.5,
 });
@@ -140,8 +127,8 @@ handle.position.set(4.85, 1.5, 2);
 scene.add(handle);
 
 // add light switch
-const toggleGeometry = new THREE.BoxGeometry(0.05, 0.5, 0.33);
-const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x111111 });
+const toggleGeometry = new THREE.BoxGeometry(0.1, 1, 0.75);
+const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
 lightSwitch.position.set(4.95, 1.75, 1);
 const switchMesh = [];
@@ -154,7 +141,7 @@ scene.add(lightSwitch);
 
 const textureList = ["wood", "stone", "tiles"]; // all textures
 // begin with the texture at the back of the list, this is to
-// ensure that when calling setTexture, the first one is called
+// ensure that when calling setTexture, the first texture is set
 let currentTexture = textureList[textureList.length - 1];
 setTexture();
 
@@ -212,12 +199,12 @@ loader.load(
     });
 
     // for animations
-    bananaMixer = new THREE.AnimationMixer(banana);
-    const bananaAnimations = gltf.animations;
-    bananaAnimations.forEach((clip) => {
-      const action = bananaMixer.clipAction(clip);
-      actions.push(action);
-    });
+    // bananaMixer = new THREE.AnimationMixer(banana);
+    // const bananaAnimations = gltf.animations;
+    // bananaAnimations.forEach((clip) => {
+    //   const action = bananaMixer.clipAction(clip);
+    //   actions.push(action);
+    // });
   },
   undefined,
   function (error) {
@@ -245,12 +232,12 @@ loader.load(
     });
 
     // for animations
-    cherryMixer = new THREE.AnimationMixer(cherry);
-    const cherryAnimations = gltf.animations;
-    cherryAnimations.forEach((clip) => {
-      const action = cherryMixer.clipAction(clip);
-      actions.push(action);
-    });
+    // cherryMixer = new THREE.AnimationMixer(cherry);
+    // const cherryAnimations = gltf.animations;
+    // cherryAnimations.forEach((clip) => {
+    //   const action = cherryMixer.clipAction(clip);
+    //   actions.push(action);
+    // });
   },
   undefined,
   function (error) {
@@ -276,12 +263,12 @@ loader.load(
     });
 
     // for animations
-    grapeMixer = new THREE.AnimationMixer(grape);
-    const grapeAnimations = gltf.animations;
-    grapeAnimations.forEach((clip) => {
-      const action = grapeMixer.clipAction(clip);
-      actions.push(action);
-    });
+    // grapeMixer = new THREE.AnimationMixer(grape);
+    // const grapeAnimations = gltf.animations;
+    // grapeAnimations.forEach((clip) => {
+    //   const action = grapeMixer.clipAction(clip);
+    //   actions.push(action);
+    // });
   },
   undefined,
   function (error) {
@@ -539,75 +526,31 @@ function getTexture(object, type) {
 }
 
 function setTexture() {
-  // redecorate the room with a random texture
+  // get next texture
+  let currentIndex = textureList.indexOf(currentTexture);
+  currentTexture = textureList[(currentIndex + 1) % textureList.length];
 
-  // get random texture
-  let newTexture = currentTexture;
-  while (newTexture == currentTexture) {
-    newTexture = textureList[Math.floor(Math.random() * textureList.length)];
-  }
-  currentTexture = newTexture;
+  // switch all required objects to the texture
+  applyTextures(floor.material, "floor");
+  applyTextures(backWall.material, "wall");
+  applyTextures(rightWall.material, "wall");
+  applyTextures(door.material, "door");
+}
 
-  // switch all objects to the texture
-  const floorDiffuse = textureLoader.load(getTexture("floor", "diffuse"));
-  const floorNormal = textureLoader.load(getTexture("floor", "normal"));
-  const floorRoughness = textureLoader.load(getTexture("floor", "roughness"));
+function applyTextures(material, object) {
+  const diffuse = textureLoader.load(getTexture(object, "diffuse"));
+  const normal = textureLoader.load(getTexture(object, "normal"));
+  const roughness = textureLoader.load(getTexture(object, "roughness"));
 
-  floorDiffuse.encoding = THREE.sRGBEncoding;
-  floorDiffuse.wrapS = floorDiffuse.wrapT = THREE.RepeatWrapping;
+  diffuse.wrapS = diffuse.wrapT = THREE.RepeatWrapping;
+  diffuse.repeat.set(2, 2);
+  normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
+  normal.repeat.set(2, 2);
+  roughness.wrapS = roughness.wrapT = THREE.RepeatWrapping;
+  roughness.repeat.set(2, 2);
 
-  floorNormal.encoding = THREE.LinearEncoding;
-  floorNormal.wrapS = floorNormal.wrapT = THREE.RepeatWrapping;
-
-  floorRoughness.encoding = THREE.LinearEncoding;
-  floorRoughness.wrapS = floorRoughness.wrapT = THREE.RepeatWrapping;
-
-  floor.material.map = floorDiffuse;
-  floor.material.normalMap = floorNormal;
-  floor.material.roughnessMap = floorRoughness;
-  floor.material.needsUpdate = true;
-
-  const wallDiffuse = textureLoader.load(getTexture("wall", "diffuse"));
-  const wallNormal = textureLoader.load(getTexture("wall", "normal"));
-  const wallRoughness = textureLoader.load(getTexture("wall", "roughness"));
-
-  wallDiffuse.encoding = THREE.sRGBEncoding;
-  wallDiffuse.wrapS = wallDiffuse.wrapT = THREE.RepeatWrapping;
-  wallDiffuse.repeat.set(2, 1);
-
-  wallNormal.encoding = THREE.LinearEncoding;
-  wallNormal.wrapS = wallNormal.wrapT = THREE.RepeatWrapping;
-  wallNormal.repeat.set(2, 1);
-
-  wallRoughness.encoding = THREE.LinearEncoding;
-  wallRoughness.wrapS = wallRoughness.wrapT = THREE.RepeatWrapping;
-  wallRoughness.repeat.set(2, 1);
-
-  backWall.material.map = wallDiffuse;
-  backWall.material.normalMap = wallNormal;
-  backWall.material.roughnessMap = wallRoughness;
-  backWall.material.needsUpdate = true;
-
-  rightWall.material.map = wallDiffuse;
-  rightWall.material.normalMap = wallNormal;
-  rightWall.material.roughnessMap = wallRoughness;
-  rightWall.material.needsUpdate = true;
-
-  const doorDiffuse = textureLoader.load(getTexture("door", "diffuse"));
-  const doorNormal = textureLoader.load(getTexture("door", "normal"));
-  const doorRoughness = textureLoader.load(getTexture("door", "roughness"));
-
-  doorDiffuse.encoding = THREE.sRGBEncoding;
-  doorDiffuse.wrapS = doorDiffuse.wrapT = THREE.RepeatWrapping;
-
-  doorNormal.encoding = THREE.LinearEncoding;
-  doorNormal.wrapS = doorNormal.wrapT = THREE.RepeatWrapping;
-
-  doorRoughness.encoding = THREE.LinearEncoding;
-  doorRoughness.wrapS = doorRoughness.wrapT = THREE.RepeatWrapping;
-
-  door.material.map = doorDiffuse;
-  door.material.normalMap = doorNormal;
-  door.material.roughnessMap = doorRoughness;
-  door.material.needsUpdate = true;
+  material.map = diffuse;
+  material.normalMap = normal;
+  material.roughnessMap = roughness;
+  material.needsUpdate = true;
 }
