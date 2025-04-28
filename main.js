@@ -501,7 +501,7 @@ function playOpenFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load("sound/open-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
-    sound.setVolume(1);
+    sound.setVolume(2);
     sound.play();
   });
 }
@@ -510,7 +510,7 @@ function playCloseFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load("sound/close-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
-    sound.setVolume(0.5);
+    sound.setVolume(0.25);
     sound.play();
   });
 }
@@ -519,7 +519,7 @@ function playLightSwitchSfx() {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load("sound/light-switch.wav", function (buffer) {
     sound.setBuffer(buffer);
-    sound.setVolume(0.75);
+    sound.setVolume(0.5);
     sound.play();
   });
 }
