@@ -384,6 +384,8 @@ document.body.appendChild(hoverFridgeText);
 window.addEventListener("mousemove", onPointerMove);
 
 function onPointerMove(event) {
+  if (!lightSwitch || !fridge) return; // return if objects not loaded
+
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
