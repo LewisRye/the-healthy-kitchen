@@ -68,19 +68,13 @@ const textureLoader = new THREE.TextureLoader();
 // add floor
 const floorGeometry = new THREE.BoxGeometry(10, 10, 0.01);
 
-const floorDiffuse = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_diff_1k.jpg"
-);
+const floorDiffuse = textureLoader.load("textures/floor/diffuse.jpg");
 floorDiffuse.wrapS = floorDiffuse.wrapT = THREE.RepeatWrapping;
 
-const floorNormal = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_nor_gl_1k.jpg"
-);
+const floorNormal = textureLoader.load("textures/floor/normal.jpg");
 floorNormal.wrapS = floorNormal.wrapT = THREE.RepeatWrapping;
 
-const floorRoughness = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/granite_tile/granite_tile_rough_1k.jpg"
-);
+const floorRoughness = textureLoader.load("textures/floor/roughness.jpg");
 floorRoughness.wrapS = floorRoughness.wrapT = THREE.RepeatWrapping;
 
 const floorMaterial = new THREE.MeshStandardMaterial({
@@ -96,21 +90,15 @@ scene.add(floor);
 // add wall texture
 const wallGeometry = new THREE.BoxGeometry(10, 5, 0.01);
 
-const wallDiffuse = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_diff_1k.jpg"
-);
+const wallDiffuse = textureLoader.load("textures/wall/diffuse.jpg");
 wallDiffuse.wrapS = wallDiffuse.wrapT = THREE.RepeatWrapping;
 wallDiffuse.repeat.set(2, 1);
 
-const wallNormal = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_nor_gl_1k.jpg"
-);
+const wallNormal = textureLoader.load("textures/wall/normal.jpg");
 wallNormal.wrapS = wallNormal.wrapT = THREE.RepeatWrapping;
 wallNormal.repeat.set(2, 1);
 
-const wallRoughness = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plaster_brick_pattern/plaster_brick_pattern_rough_1k.jpg"
-);
+const wallRoughness = textureLoader.load("textures/wall/roughness.jpg");
 wallRoughness.wrapS = wallRoughness.wrapT = THREE.RepeatWrapping;
 wallRoughness.repeat.set(2, 1);
 
@@ -134,19 +122,13 @@ scene.add(rightWall);
 // add door to right wall
 const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
 
-const doorDiffuse = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_diff_1k.jpg"
-);
+const doorDiffuse = textureLoader.load("textures/door/diffuse.jpg");
 doorDiffuse.wrapS = doorDiffuse.wrapT = THREE.RepeatWrapping;
 
-const doorNormal = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_nor_gl_1k.jpg"
-);
+const doorNormal = textureLoader.load("textures/door/normal.jpg");
 doorNormal.wrapS = doorNormal.wrapT = THREE.RepeatWrapping;
 
-const doorRoughness = textureLoader.load(
-  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/synthetic_wood/synthetic_wood_rough_1k.jpg"
-);
+const doorRoughness = textureLoader.load("textures/door/roughness.jpg");
 doorRoughness.wrapS = doorRoughness.wrapT = THREE.RepeatWrapping;
 
 const doorMaterial = new THREE.MeshStandardMaterial({
