@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -18,12 +19,14 @@ let fridgeOpen = false;
 let lightOn = false;
 
 scene = new THREE.Scene();
+
 camera = new THREE.PerspectiveCamera(
   60,
   window.innerWidth / (window.innerHeight * 0.8),
   0.1,
   10000
 );
+
 renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight * 0.8);
 renderer.setClearColor(0x87ceeb);
@@ -39,18 +42,21 @@ container.appendChild(renderer.domElement);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(-5, 2.75, 7.5);
+camera.lookAt(0, 0, 0);
 orbit.update();
 
 // add lighting
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambientLight);
 
-const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+const sunLight = new THREE.DirectionalLight(0xffffff, 1, 1000);
 sunLight.position.set(-5, 2.5, 5);
+sunLight.castShadow = true;
 scene.add(sunLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+const pointLight = new THREE.PointLight(0xffffff, 0, 1000);
 pointLight.position.set(0, 5, 0);
+pointLight.castShadow = true;
 scene.add(pointLight);
 
 const fridgeTopLight = new THREE.PointLight(0xffffff, 1, 5);
@@ -66,21 +72,16 @@ scene.add(fridgeBottomLight);
 const textureLoader = new THREE.TextureLoader();
 
 // add floor
-const floorGeometry = new THREE.BoxGeometry(10, 10, 0.01);
-
-const floorDiffuse = textureLoader.load("textures/floor/diffuse.jpg");
-floorDiffuse.wrapS = floorDiffuse.wrapT = THREE.RepeatWrapping;
-
-const floorNormal = textureLoader.load("textures/floor/normal.jpg");
-floorNormal.wrapS = floorNormal.wrapT = THREE.RepeatWrapping;
-
-const floorRoughness = textureLoader.load("textures/floor/roughness.jpg");
-floorRoughness.wrapS = floorRoughness.wrapT = THREE.RepeatWrapping;
-
+const floorGeometry = new THREE.BoxGeometry(10, 10, 0.05);
+const floorDiffuse = new THREE.Texture();
+const floorNormal = new THREE.Texture();
+const floorRoughness = new THREE.Texture();
 const floorMaterial = new THREE.MeshStandardMaterial({
   map: floorDiffuse,
   normalMap: floorNormal,
   roughnessMap: floorRoughness,
+  roughness: 0.75,
+  metalness: 0.25,
 });
 
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -88,24 +89,16 @@ floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
 
 // add wall texture
-const wallGeometry = new THREE.BoxGeometry(10, 5, 0.01);
-
-const wallDiffuse = textureLoader.load("textures/wall/diffuse.jpg");
-wallDiffuse.wrapS = wallDiffuse.wrapT = THREE.RepeatWrapping;
-wallDiffuse.repeat.set(2, 1);
-
-const wallNormal = textureLoader.load("textures/wall/normal.jpg");
-wallNormal.wrapS = wallNormal.wrapT = THREE.RepeatWrapping;
-wallNormal.repeat.set(2, 1);
-
-const wallRoughness = textureLoader.load("textures/wall/roughness.jpg");
-wallRoughness.wrapS = wallRoughness.wrapT = THREE.RepeatWrapping;
-wallRoughness.repeat.set(2, 1);
-
+const wallGeometry = new THREE.BoxGeometry(10, 5, 0.05);
+const wallDiffuse = new THREE.Texture();
+const wallNormal = new THREE.Texture();
+const wallRoughness = new THREE.Texture();
 const wallMaterial = new THREE.MeshStandardMaterial({
   map: wallDiffuse,
   normalMap: wallNormal,
   roughnessMap: wallRoughness,
+  roughness: 0.75,
+  metalness: 0.5,
 });
 
 // add back wall
@@ -119,24 +112,20 @@ rightWall.position.set(5, 2.5, 0);
 rightWall.rotation.y = -Math.PI / 2;
 scene.add(rightWall);
 
-// add door to right wall
+// create door texture
 const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
-
-const doorDiffuse = textureLoader.load("textures/door/diffuse.jpg");
-doorDiffuse.wrapS = doorDiffuse.wrapT = THREE.RepeatWrapping;
-
-const doorNormal = textureLoader.load("textures/door/normal.jpg");
-doorNormal.wrapS = doorNormal.wrapT = THREE.RepeatWrapping;
-
-const doorRoughness = textureLoader.load("textures/door/roughness.jpg");
-doorRoughness.wrapS = doorRoughness.wrapT = THREE.RepeatWrapping;
-
+const doorDiffuse = new THREE.Texture();
+const doorNormal = new THREE.Texture();
+const doorRoughness = new THREE.Texture();
 const doorMaterial = new THREE.MeshStandardMaterial({
   map: doorDiffuse,
   normalMap: doorNormal,
   roughnessMap: doorRoughness,
+  roughness: 0.5,
+  metalness: 0.1,
 });
 
+// create door
 const door = new THREE.Mesh(doorGeometry, doorMaterial);
 door.position.set(4.95, 1.5, 2.5);
 door.rotation.y = -Math.PI / 2;
@@ -163,6 +152,12 @@ lightSwitch.traverse(function (child) {
 });
 scene.add(lightSwitch);
 
+const textureList = ["wood", "stone", "tiles"]; // all textures
+// begin with the texture at the back of the list, this is to
+// ensure that when calling setTexture, the first one is called
+let currentTexture = textureList[textureList.length - 1];
+setTexture();
+
 // load all models
 const loader = new GLTFLoader();
 
@@ -179,6 +174,7 @@ loader.load(
     fridge.traverse(function (child) {
       if (child.isMesh) {
         fridgeMesh.push(child);
+        child.castShadow = true;
       }
     });
 
@@ -210,6 +206,8 @@ loader.load(
     banana.traverse(function (child) {
       if (child.isMesh) {
         bananaMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
 
@@ -241,6 +239,8 @@ loader.load(
     cherry.traverse(function (child) {
       if (child.isMesh) {
         cherryMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
 
@@ -309,6 +309,11 @@ document
       }
     });
   });
+
+// toggle texture button
+document.getElementById("btnRedecorate").addEventListener("click", function () {
+  setTexture();
+});
 
 window.addEventListener("resize", () => {
   // resize camera to allow for new window size
@@ -437,6 +442,8 @@ function onMouseClick(event) {
     fridgeMesh.includes(fridgeIntersect[0].object)
   ) {
     if (fridgeActions.length > 0 && fridgeOpen) {
+      camera.position.set(-5, 2.75, 7.5);
+      camera.lookAt(0, 0, 0);
       animateIntensity(fridgeTopLight, 2, 0, 2000);
       animateIntensity(fridgeBottomLight, 2, 0, 2000);
 
@@ -452,10 +459,13 @@ function onMouseClick(event) {
           action.paused = true;
           action.time = 0;
           playCloseFridgeSfx();
-        }, 1850);
+        }, 1800);
       }
       fridgeOpen = false;
     } else if (fridgeActions.length > 0 && !fridgeOpen) {
+      camera.position.set(0, 2, 0);
+      camera.lookAt(0, 0, -10);
+
       animateIntensity(fridgeTopLight, 0, 2, 1000);
       animateIntensity(fridgeBottomLight, 0, 2, 1000);
       playOpenFridgeSfx();
@@ -499,7 +509,7 @@ function onMouseClick(event) {
 
 function playOpenFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sound/open-fridge.wav", function (buffer) {
+  audioLoader.load("sounds/open-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(2);
     sound.play();
@@ -508,7 +518,7 @@ function playOpenFridgeSfx() {
 
 function playCloseFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sound/close-fridge.wav", function (buffer) {
+  audioLoader.load("sounds/close-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(0.25);
     sound.play();
@@ -517,9 +527,87 @@ function playCloseFridgeSfx() {
 
 function playLightSwitchSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sound/light-switch.wav", function (buffer) {
+  audioLoader.load("sounds/light-switch.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(0.5);
     sound.play();
   });
+}
+
+function getTexture(object, type) {
+  return `textures/${currentTexture}/${object}/${type}.jpg`;
+}
+
+function setTexture() {
+  // redecorate the room with a random texture
+
+  // get random texture
+  let newTexture = currentTexture;
+  while (newTexture == currentTexture) {
+    newTexture = textureList[Math.floor(Math.random() * textureList.length)];
+  }
+  currentTexture = newTexture;
+
+  // switch all objects to the texture
+  const floorDiffuse = textureLoader.load(getTexture("floor", "diffuse"));
+  const floorNormal = textureLoader.load(getTexture("floor", "normal"));
+  const floorRoughness = textureLoader.load(getTexture("floor", "roughness"));
+
+  floorDiffuse.encoding = THREE.sRGBEncoding;
+  floorDiffuse.wrapS = floorDiffuse.wrapT = THREE.RepeatWrapping;
+
+  floorNormal.encoding = THREE.LinearEncoding;
+  floorNormal.wrapS = floorNormal.wrapT = THREE.RepeatWrapping;
+
+  floorRoughness.encoding = THREE.LinearEncoding;
+  floorRoughness.wrapS = floorRoughness.wrapT = THREE.RepeatWrapping;
+
+  floor.material.map = floorDiffuse;
+  floor.material.normalMap = floorNormal;
+  floor.material.roughnessMap = floorRoughness;
+  floor.material.needsUpdate = true;
+
+  const wallDiffuse = textureLoader.load(getTexture("wall", "diffuse"));
+  const wallNormal = textureLoader.load(getTexture("wall", "normal"));
+  const wallRoughness = textureLoader.load(getTexture("wall", "roughness"));
+
+  wallDiffuse.encoding = THREE.sRGBEncoding;
+  wallDiffuse.wrapS = wallDiffuse.wrapT = THREE.RepeatWrapping;
+  wallDiffuse.repeat.set(2, 1);
+
+  wallNormal.encoding = THREE.LinearEncoding;
+  wallNormal.wrapS = wallNormal.wrapT = THREE.RepeatWrapping;
+  wallNormal.repeat.set(2, 1);
+
+  wallRoughness.encoding = THREE.LinearEncoding;
+  wallRoughness.wrapS = wallRoughness.wrapT = THREE.RepeatWrapping;
+  wallRoughness.repeat.set(2, 1);
+
+  backWall.material.map = wallDiffuse;
+  backWall.material.normalMap = wallNormal;
+  backWall.material.roughnessMap = wallRoughness;
+  backWall.material.needsUpdate = true;
+
+  rightWall.material.map = wallDiffuse;
+  rightWall.material.normalMap = wallNormal;
+  rightWall.material.roughnessMap = wallRoughness;
+  rightWall.material.needsUpdate = true;
+
+  const doorDiffuse = textureLoader.load(getTexture("door", "diffuse"));
+  const doorNormal = textureLoader.load(getTexture("door", "normal"));
+  const doorRoughness = textureLoader.load(getTexture("door", "roughness"));
+
+  doorDiffuse.encoding = THREE.sRGBEncoding;
+  doorDiffuse.wrapS = doorDiffuse.wrapT = THREE.RepeatWrapping;
+
+  doorNormal.encoding = THREE.LinearEncoding;
+  doorNormal.wrapS = doorNormal.wrapT = THREE.RepeatWrapping;
+
+  doorRoughness.encoding = THREE.LinearEncoding;
+  doorRoughness.wrapS = doorRoughness.wrapT = THREE.RepeatWrapping;
+
+  door.material.map = doorDiffuse;
+  door.material.normalMap = doorNormal;
+  door.material.roughnessMap = doorRoughness;
+  door.material.needsUpdate = true;
 }
