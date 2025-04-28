@@ -5,6 +5,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 let scene,
   camera,
   renderer,
+  listener,
+  sound,
   fridgeMixer,
   fridgeAnimations,
   fridgeActions,
@@ -27,6 +29,10 @@ renderer.setSize(window.innerWidth, window.innerHeight * 0.8);
 renderer.setClearColor(0x87ceeb);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+listener = new THREE.AudioListener();
+sound = new THREE.Audio(listener);
+camera.add(listener);
 
 const container = document.getElementById("three-container");
 container.appendChild(renderer.domElement);
@@ -322,84 +328,6 @@ document
     });
   });
 
-const clock = new THREE.Clock();
-const pointer = new THREE.Vector2();
-const raycaster = new THREE.Raycaster();
-raycaster.far = 1000;
-raycaster.near = 0.1;
-
-window.addEventListener("click", onMouseClick, false);
-
-function onMouseClick(event) {
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(pointer, camera);
-
-  const fridgeIntersect = raycaster.intersectObject(fridge, true);
-  // fridge clicked
-  if (
-    fridgeIntersect.length > 0 &&
-    fridgeMesh.includes(fridgeIntersect[0].object)
-  ) {
-    if (fridgeActions.length > 0 && fridgeOpen) {
-      animateIntensity(fridgeTopLight, 2, 0, 2000);
-      animateIntensity(fridgeBottomLight, 2, 0, 2000);
-
-      for (let action of fridgeActions) {
-        action.reset();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.timeScale = 1;
-        action.time = 40 / 30;
-        action.play();
-
-        setTimeout(() => {
-          action.paused = true;
-          action.time = 0;
-        }, 2000);
-      }
-      fridgeOpen = false;
-    } else if (fridgeActions.length > 0 && !fridgeOpen) {
-      animateIntensity(fridgeTopLight, 0, 2, 1000);
-      animateIntensity(fridgeBottomLight, 0, 2, 1000);
-
-      for (let action of fridgeActions) {
-        action.reset();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.timeScale = 1;
-        action.play();
-
-        setTimeout(() => {
-          action.paused = true;
-          action.time = 1.33;
-        }, 1900);
-      }
-      fridgeOpen = true;
-    }
-  }
-
-  const switchIntersect = raycaster.intersectObject(lightSwitch, true);
-  if (
-    switchIntersect.length > 0 &&
-    switchMesh.includes(switchIntersect[0].object)
-  ) {
-    // light switch clicked
-    lightOn = !lightOn;
-
-    if (lightOn) {
-      animateBackgroundColor(0x87ceeb, 0x070b34, 500);
-      animateIntensity(sunLight, 1, 0, 500);
-      animateIntensity(pointLight, 0, 50, 500);
-    } else {
-      animateBackgroundColor(0x070b34, 0x87ceeb, 500);
-      animateIntensity(sunLight, 0, 1, 500);
-      animateIntensity(pointLight, 50, 0, 500);
-    }
-  }
-}
-
 window.addEventListener("resize", () => {
   // resize camera to allow for new window size
   let width = window.innerWidth;
@@ -408,6 +336,10 @@ window.addEventListener("resize", () => {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 });
+
+const clock = new THREE.Clock();
+const pointer = new THREE.Vector2();
+const raycaster = new THREE.Raycaster();
 
 function animateIntensity(light, from, to, duration = 1000) {
   const startTime = performance.now();
@@ -476,6 +408,7 @@ hoverFridgeText.style.borderRadius = "5px";
 document.body.appendChild(hoverFridgeText);
 
 window.addEventListener("mousemove", onPointerMove);
+
 function onPointerMove(event) {
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -505,4 +438,106 @@ function onPointerMove(event) {
   } else {
     hoverFridgeText.style.display = "none";
   }
+}
+
+window.addEventListener("click", onMouseClick, false);
+
+function onMouseClick(event) {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+
+  const fridgeIntersect = raycaster.intersectObject(fridge, true);
+  // fridge clicked
+  if (
+    fridgeIntersect.length > 0 &&
+    fridgeMesh.includes(fridgeIntersect[0].object)
+  ) {
+    if (fridgeActions.length > 0 && fridgeOpen) {
+      animateIntensity(fridgeTopLight, 2, 0, 2000);
+      animateIntensity(fridgeBottomLight, 2, 0, 2000);
+
+      for (let action of fridgeActions) {
+        action.reset();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+        action.timeScale = 1;
+        action.time = 40 / 30;
+        action.play();
+
+        setTimeout(() => {
+          action.paused = true;
+          action.time = 0;
+          playCloseFridgeSfx();
+        }, 1850);
+      }
+      fridgeOpen = false;
+    } else if (fridgeActions.length > 0 && !fridgeOpen) {
+      animateIntensity(fridgeTopLight, 0, 2, 1000);
+      animateIntensity(fridgeBottomLight, 0, 2, 1000);
+      playOpenFridgeSfx();
+
+      for (let action of fridgeActions) {
+        action.reset();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+        action.timeScale = 1;
+        action.play();
+
+        setTimeout(() => {
+          action.paused = true;
+          action.time = 1.33;
+        }, 1900);
+      }
+      fridgeOpen = true;
+    }
+  }
+
+  const switchIntersect = raycaster.intersectObject(lightSwitch, true);
+  if (
+    switchIntersect.length > 0 &&
+    switchMesh.includes(switchIntersect[0].object)
+  ) {
+    // light switch clicked
+    lightOn = !lightOn;
+    playLightSwitchSfx();
+
+    if (lightOn) {
+      animateBackgroundColor(0x87ceeb, 0x070b34, 500);
+      animateIntensity(sunLight, 1, 0, 500);
+      animateIntensity(pointLight, 0, 50, 500);
+    } else {
+      animateBackgroundColor(0x070b34, 0x87ceeb, 500);
+      animateIntensity(sunLight, 0, 1, 500);
+      animateIntensity(pointLight, 50, 0, 500);
+    }
+  }
+}
+
+function playOpenFridgeSfx() {
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load("sound/open-fridge.wav", function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setVolume(1);
+    sound.play();
+  });
+}
+
+function playCloseFridgeSfx() {
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load("sound/close-fridge.wav", function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setVolume(0.5);
+    sound.play();
+  });
+}
+
+function playLightSwitchSfx() {
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load("sound/light-switch.wav", function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setVolume(0.75);
+    sound.play();
+  });
 }
