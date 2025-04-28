@@ -163,11 +163,10 @@ handle.position.set(4.85, 1.5, 2);
 scene.add(handle);
 
 // add light switch
-const toggleGeometry = new THREE.BoxGeometry(0.75, 0.5, 0.5);
+const toggleGeometry = new THREE.BoxGeometry(0.05, 0.5, 0.33);
 const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x111111 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
-lightSwitch.rotation.z = -20; // -20 for off, 20 for on
-lightSwitch.position.set(5, 1.75, 1);
+lightSwitch.position.set(4.95, 1.75, 1);
 const switchMesh = [];
 lightSwitch.traverse(function (child) {
   if (child.isMesh) {
@@ -388,7 +387,6 @@ function onMouseClick(event) {
   ) {
     // light switch clicked
     lightOn = !lightOn;
-    lightSwitch.rotation.z = -lightSwitch.rotation.z;
 
     if (lightOn) {
       animateBackgroundColor(0x87ceeb, 0x070b34, 500);
@@ -459,3 +457,52 @@ function animate() {
 }
 
 renderer.setAnimationLoop(animate);
+
+const hoverLightSwitchText = document.createElement("div");
+hoverLightSwitchText.style.position = "absolute";
+hoverLightSwitchText.style.color = "white";
+hoverLightSwitchText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverLightSwitchText.style.padding = "5px";
+hoverLightSwitchText.style.borderRadius = "5px";
+hoverLightSwitchText.innerHTML = "Toggle Lights";
+document.body.appendChild(hoverLightSwitchText);
+
+const hoverFridgeText = document.createElement("div");
+hoverFridgeText.style.position = "absolute";
+hoverFridgeText.style.color = "white";
+hoverFridgeText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverFridgeText.style.padding = "5px";
+hoverFridgeText.style.borderRadius = "5px";
+document.body.appendChild(hoverFridgeText);
+
+window.addEventListener("mousemove", onPointerMove);
+function onPointerMove(event) {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+
+  const intersectsLightSwitch = raycaster.intersectObject(lightSwitch, true);
+  const intersectsFridge = raycaster.intersectObject(fridge, true);
+
+  if (intersectsLightSwitch.length > 0) {
+    hoverLightSwitchText.style.left = event.clientX + "px";
+    hoverLightSwitchText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverLightSwitchText.style.display = "block";
+  } else {
+    hoverLightSwitchText.style.display = "none";
+  }
+
+  if (intersectsFridge.length > 0) {
+    if (fridgeOpen) {
+      hoverFridgeText.innerHTML = "Close Fridge";
+    } else {
+      hoverFridgeText.innerHTML = "Open Fridge";
+    }
+    hoverFridgeText.style.left = event.clientX + "px";
+    hoverFridgeText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverFridgeText.style.display = "block";
+  } else {
+    hoverFridgeText.style.display = "none";
+  }
+}
