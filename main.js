@@ -185,7 +185,7 @@ loader.load(
   "/models/fridge.glb",
   function (gltf) {
     fridge = gltf.scene;
-    fridge.position.set(0, 1.5, -4.5);
+    fridge.position.set(0, 1.525, -4.5);
     scene.add(fridge);
 
     // for raycasting
