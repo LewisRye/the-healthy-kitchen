@@ -29,12 +29,22 @@ scene.add(sunLight);
 let grape;
 
 const loader = new GLTFLoader();
+
+const grapeMesh = [];
 loader.load(
   "/models/grape.gltf",
   function (gltf) {
     grape = gltf.scene;
     grape.scale.set(10, 10, 10);
     scene.add(grape);
+
+    grape.traverse(function (child) {
+      if (child.isMesh) {
+        grapeMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {

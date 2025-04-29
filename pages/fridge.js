@@ -29,12 +29,22 @@ scene.add(sunLight);
 let fridge;
 
 const loader = new GLTFLoader();
+
+const fridgeMesh = [];
 loader.load(
   "/models/fridge.glb",
   function (gltf) {
     fridge = gltf.scene;
     fridge.scale.set(50, 50, 50);
     scene.add(fridge);
+
+    fridge.traverse(function (child) {
+      if (child.isMesh) {
+        fridgeMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {

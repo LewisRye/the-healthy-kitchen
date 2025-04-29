@@ -29,12 +29,22 @@ scene.add(sunLight);
 let cherry;
 
 const loader = new GLTFLoader();
+
+const cherryMesh = [];
 loader.load(
   "/models/cherry.gltf",
   function (gltf) {
     cherry = gltf.scene;
     cherry.scale.set(25, 25, 25);
     scene.add(cherry);
+
+    cherry.traverse(function (child) {
+      if (child.isMesh) {
+        cherryMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {

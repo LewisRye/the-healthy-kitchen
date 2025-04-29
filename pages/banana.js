@@ -29,11 +29,21 @@ scene.add(sunLight);
 let banana;
 
 const loader = new GLTFLoader();
+
+const bananaMesh = [];
 loader.load(
   "/models/banana.gltf",
   function (gltf) {
     banana = gltf.scene;
     scene.add(banana);
+
+    banana.traverse(function (child) {
+      if (child.isMesh) {
+        bananaMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {
