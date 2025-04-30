@@ -49,7 +49,7 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambientLight);
 
 const sunLight = new THREE.DirectionalLight(0xffffff, 1);
-sunLight.position.set(-2.5, 10, 2.5);
+sunLight.position.set(-20, 5, 20);
 sunLight.castShadow = true;
 scene.add(sunLight);
 
@@ -99,15 +99,43 @@ rightWall.position.set(5, 2.5, 0);
 rightWall.rotation.y = -Math.PI / 2;
 scene.add(rightWall);
 
+// add cupboards
+const shortCupboardGeometry = new THREE.BoxGeometry(1.25, 1.5, 1);
+const longCupboardGeometry = new THREE.BoxGeometry(4, 1.5, 1);
+const cupboardMaterial = new THREE.MeshStandardMaterial({
+  color: 0x8b8b8b,
+  roughness: 0.75,
+  metalness: 0.75,
+});
+
+const cupboard1 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
+cupboard1.position.set(3, 0.75, -4.5);
+cupboard1.castShadow = true;
+cupboard1.receiveShadow = true;
+scene.add(cupboard1);
+
+const cupboard2 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
+cupboard2.position.set(1.65, 3, -4.5);
+cupboard2.castShadow = true;
+cupboard2.receiveShadow = true;
+scene.add(cupboard2);
+
+const cupboard3 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
+cupboard3.position.set(4.35, 3, -4.5);
+cupboard3.castShadow = true;
+cupboard3.receiveShadow = true;
+scene.add(cupboard3);
+
+const cupboard4 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
+cupboard4.position.set(4.5, 0.75, -3);
+cupboard4.rotation.y = -Math.PI / 2;
+cupboard4.castShadow = true;
+cupboard4.receiveShadow = true;
+scene.add(cupboard4);
+
 // create door texture
 const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
-const doorDiffuse = new THREE.Texture();
-const doorNormal = new THREE.Texture();
-const doorRoughness = new THREE.Texture();
 const doorMaterial = new THREE.MeshStandardMaterial({
-  map: doorDiffuse,
-  normalMap: doorNormal,
-  roughnessMap: doorRoughness,
   roughness: 0.5,
   metalness: 0.1,
 });
@@ -130,7 +158,7 @@ scene.add(handle);
 const toggleGeometry = new THREE.BoxGeometry(0.1, 1, 0.75);
 const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
-lightSwitch.position.set(4.95, 1.75, 1);
+lightSwitch.position.set(4.9, 2, 0.8);
 const switchMesh = [];
 lightSwitch.traverse(function (child) {
   if (child.isMesh) {
