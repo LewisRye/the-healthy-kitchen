@@ -27,17 +27,18 @@ sunLight.position.set(-5, 2.5, 5);
 scene.add(sunLight);
 
 let banana;
+let wireframeEnabled = false;
 
 const loader = new GLTFLoader();
 
 const bananaMesh = [];
 loader.load(
   "/models/banana.gltf",
-  function (gltf) {
+  (gltf) => {
     banana = gltf.scene;
     scene.add(banana);
 
-    banana.traverse(function (child) {
+    banana.traverse((child) => {
       if (child.isMesh) {
         bananaMesh.push(child);
         child.castShadow = true;
@@ -46,7 +47,7 @@ loader.load(
     });
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
@@ -54,17 +55,14 @@ loader.load(
 camera.position.z = 150;
 
 // toggle wireframe button
-let wireframe = false;
-document
-  .getElementById("btnToggleWireframe")
-  .addEventListener("click", function () {
-    wireframe = !wireframe;
-    scene.traverse(function (object) {
-      if (object.isMesh) {
-        object.material.wireframe = wireframe;
-      }
-    });
+document.getElementById("btnToggleWireframe").addEventListener("click", () => {
+  wireframeEnabled = !wireframeEnabled;
+  scene.traverse((object) => {
+    if (object.isMesh) {
+      object.material.wireframe = wireframeEnabled;
+    }
   });
+});
 
 function animate() {
   if (banana) {

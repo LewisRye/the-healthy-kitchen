@@ -27,18 +27,19 @@ sunLight.position.set(-5, 2.5, 5);
 scene.add(sunLight);
 
 let cherry;
+let wireframeEnabled = false;
 
 const loader = new GLTFLoader();
 
 const cherryMesh = [];
 loader.load(
   "/models/cherry.gltf",
-  function (gltf) {
+  (gltf) => {
     cherry = gltf.scene;
     cherry.scale.set(25, 25, 25);
     scene.add(cherry);
 
-    cherry.traverse(function (child) {
+    cherry.traverse((child) => {
       if (child.isMesh) {
         cherryMesh.push(child);
         child.castShadow = true;
@@ -47,7 +48,7 @@ loader.load(
     });
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
@@ -55,17 +56,14 @@ loader.load(
 camera.position.z = 150;
 
 // toggle wireframe button
-let wireframe = false;
-document
-  .getElementById("btnToggleWireframe")
-  .addEventListener("click", function () {
-    wireframe = !wireframe;
-    scene.traverse(function (object) {
-      if (object.isMesh) {
-        object.material.wireframe = wireframe;
-      }
-    });
+document.getElementById("btnToggleWireframe").addEventListener("click", () => {
+  wireframeEnabled = !wireframeEnabled;
+  scene.traverse((object) => {
+    if (object.isMesh) {
+      object.material.wireframe = wireframeEnabled;
+    }
   });
+});
 
 function animate() {
   if (cherry) {

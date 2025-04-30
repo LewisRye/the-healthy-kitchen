@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-$("#btnCloseFridge").hide();
+$("#btnCloseFridge").hide(); // hide the close fridge button, as the fridge is not open yet
 
 let scene,
   camera,
@@ -14,6 +14,7 @@ let scene,
   fridgeAnimations,
   fridgeActions;
 
+let wireframeEnabled = false;
 let fridgeOpen = false;
 let lightOn = false;
 
@@ -160,7 +161,7 @@ const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
 const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
 lightSwitch.position.set(4.9, 2, 0.8);
 const switchMesh = [];
-lightSwitch.traverse(function (child) {
+lightSwitch.traverse((child) => {
   if (child.isMesh) {
     switchMesh.push(child);
   }
@@ -180,13 +181,13 @@ let fridge;
 const fridgeMesh = [];
 loader.load(
   "/models/fridge.glb",
-  function (gltf) {
+  (gltf) => {
     fridge = gltf.scene;
     fridge.position.set(0, 1.525, -4.5);
     scene.add(fridge);
 
     // for raycasting
-    fridge.traverse(function (child) {
+    fridge.traverse((child) => {
       if (child.isMesh) {
         fridgeMesh.push(child);
         child.castShadow = true;
@@ -201,7 +202,7 @@ loader.load(
     );
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
@@ -210,7 +211,7 @@ let banana;
 const bananaMesh = [];
 loader.load(
   "/models/banana.gltf",
-  function (gltf) {
+  (gltf) => {
     banana = gltf.scene;
     banana.scale.set(0.01, 0.01, 0.01);
     banana.position.set(0, 1.5, -4.5);
@@ -218,7 +219,7 @@ loader.load(
     scene.add(banana);
 
     // for raycasting
-    banana.traverse(function (child) {
+    banana.traverse((child) => {
       if (child.isMesh) {
         bananaMesh.push(child);
         child.castShadow = true;
@@ -227,7 +228,7 @@ loader.load(
     });
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
@@ -236,14 +237,14 @@ let cherry;
 const cherryMesh = [];
 loader.load(
   "/models/cherry.gltf",
-  function (gltf) {
+  (gltf) => {
     cherry = gltf.scene;
     cherry.scale.set(0.09, 0.09, 0.09);
     cherry.position.set(0, 0.75, -4.5);
     scene.add(cherry);
 
     // for raycasting
-    cherry.traverse(function (child) {
+    cherry.traverse((child) => {
       if (child.isMesh) {
         cherryMesh.push(child);
         child.castShadow = true;
@@ -252,7 +253,7 @@ loader.load(
     });
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
@@ -261,27 +262,27 @@ let grape;
 const grapeMesh = [];
 loader.load(
   "/models/grape.gltf",
-  function (gltf) {
+  (gltf) => {
     grape = gltf.scene;
     grape.scale.set(0.05, 0.04, 0.05);
     grape.position.set(0, 0.1, -4.5);
     scene.add(grape);
 
     // for raycasting
-    grape.traverse(function (child) {
+    grape.traverse((child) => {
       if (child.isMesh) {
         grapeMesh.push(child);
       }
     });
   },
   undefined,
-  function (error) {
+  (error) => {
     console.error(error);
   }
 );
 
 // add and receive shadows from all mesh objects
-scene.traverse(function (node) {
+scene.traverse((node) => {
   if (node.isMesh) {
     node.castShadow = true;
     node.receiveShadow = true;
@@ -415,30 +416,30 @@ window.addEventListener("click", (event) => {
       fridgeIntersect.length > 0 &&
       fridgeMesh.includes(fridgeIntersect[0].object)
     ) {
-      if (fridgeActions.length > 0 && !fridgeOpen) {
-        // open the fridge
-        camera.position.set(0, 2, 0);
-        camera.lookAt(0, 0, -10);
+      // open the fridge
+      camera.position.set(0, 2, 0);
+      camera.lookAt(0, 0, -10);
 
-        animateIntensity(fridgeTopLight, 0, 2, 1000);
-        animateIntensity(fridgeBottomLight, 0, 2, 1000);
-        playOpenFridgeSfx();
+      orbit.enabled = false; // prevent camera from moving
 
-        for (let action of fridgeActions) {
-          action.reset();
-          action.setLoop(THREE.LoopOnce);
-          action.clampWhenFinished = true;
-          action.timeScale = 1;
-          action.play();
+      animateIntensity(fridgeTopLight, 0, 2, 1000);
+      animateIntensity(fridgeBottomLight, 0, 2, 1000);
+      playOpenFridgeSfx();
 
-          setTimeout(() => {
-            action.paused = true;
-            action.time = 1.33;
-            $("#btnCloseFridge").show();
-          }, 1900);
-        }
-        fridgeOpen = true;
+      for (let action of fridgeActions) {
+        action.reset();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+        action.timeScale = 1;
+        action.play();
+
+        setTimeout(() => {
+          action.paused = true;
+          action.time = 1.33;
+          $("#btnCloseFridge").show();
+        }, 1900);
       }
+      fridgeOpen = true;
     }
   }
 
@@ -494,17 +495,14 @@ window.addEventListener("click", (event) => {
 });
 
 // toggle wireframe button
-let wireframe = false;
-document
-  .getElementById("btnToggleWireframe")
-  .addEventListener("click", function () {
-    wireframe = !wireframe;
-    scene.traverse(function (object) {
-      if (object.isMesh) {
-        object.material.wireframe = wireframe;
-      }
-    });
+document.getElementById("btnToggleWireframe").addEventListener("click", () => {
+  wireframeEnabled = !wireframeEnabled;
+  scene.traverse((object) => {
+    if (object.isMesh) {
+      object.material.wireframe = wireframeEnabled;
+    }
   });
+});
 
 // toggle texture button
 document.getElementById("btnRedecorate").addEventListener("click", () => {
@@ -515,6 +513,9 @@ document.getElementById("btnRedecorate").addEventListener("click", () => {
 document.getElementById("btnCloseFridge").addEventListener("click", () => {
   // close the fridge
   $("#btnCloseFridge").hide();
+
+  orbit.enabled = true; // allow camera to move again
+
   camera.position.set(-5, 2.75, 7.5);
   camera.lookAt(0, 0, 0);
   animateIntensity(fridgeTopLight, 2, 0, 2000);
@@ -539,7 +540,7 @@ document.getElementById("btnCloseFridge").addEventListener("click", () => {
 
 function playOpenFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sounds/open-fridge.wav", function (buffer) {
+  audioLoader.load("sounds/open-fridge.wav", (buffer) => {
     sound.setBuffer(buffer);
     sound.setVolume(2);
     if (sound.isPlaying) {
@@ -551,7 +552,7 @@ function playOpenFridgeSfx() {
 
 function playCloseFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sounds/close-fridge.wav", function (buffer) {
+  audioLoader.load("sounds/close-fridge.wav", (buffer) => {
     sound.setBuffer(buffer);
     sound.setVolume(0.25);
     if (sound.isPlaying) {
@@ -563,7 +564,7 @@ function playCloseFridgeSfx() {
 
 function playLightSwitchSfx() {
   const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sounds/light-switch.wav", function (buffer) {
+  audioLoader.load("sounds/light-switch.wav", (buffer) => {
     sound.setBuffer(buffer);
     sound.setVolume(0.5);
     if (sound.isPlaying) {
