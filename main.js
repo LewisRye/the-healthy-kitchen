@@ -9,10 +9,7 @@ let scene,
   sound,
   fridgeMixer,
   fridgeAnimations,
-  fridgeActions,
-  bananaMixer,
-  cherryMixer,
-  grapeMixer;
+  fridgeActions;
 
 let fridgeOpen = false;
 let lightOn = false;
@@ -225,14 +222,6 @@ loader.load(
         child.receiveShadow = true;
       }
     });
-
-    // for animations
-    // bananaMixer = new THREE.AnimationMixer(banana);
-    // const bananaAnimations = gltf.animations;
-    // bananaAnimations.forEach((clip) => {
-    //   const action = bananaMixer.clipAction(clip);
-    //   actions.push(action);
-    // });
   },
   undefined,
   function (error) {
@@ -258,14 +247,6 @@ loader.load(
         child.receiveShadow = true;
       }
     });
-
-    // for animations
-    // cherryMixer = new THREE.AnimationMixer(cherry);
-    // const cherryAnimations = gltf.animations;
-    // cherryAnimations.forEach((clip) => {
-    //   const action = cherryMixer.clipAction(clip);
-    //   actions.push(action);
-    // });
   },
   undefined,
   function (error) {
@@ -289,14 +270,6 @@ loader.load(
         grapeMesh.push(child);
       }
     });
-
-    // for animations
-    // grapeMixer = new THREE.AnimationMixer(grape);
-    // const grapeAnimations = gltf.animations;
-    // grapeAnimations.forEach((clip) => {
-    //   const action = grapeMixer.clipAction(clip);
-    //   actions.push(action);
-    // });
   },
   undefined,
   function (error) {
@@ -312,85 +285,9 @@ scene.traverse(function (node) {
   }
 });
 
-// toggle wireframe button
-let wireframe = false;
-document
-  .getElementById("btnToggleWireframe")
-  .addEventListener("click", function () {
-    wireframe = !wireframe;
-    scene.traverse(function (object) {
-      if (object.isMesh) {
-        object.material.wireframe = wireframe;
-      }
-    });
-  });
-
-// toggle texture button
-document.getElementById("btnRedecorate").addEventListener("click", function () {
-  setTexture();
-});
-
-window.addEventListener("resize", () => {
-  // resize camera to allow for new window size
-  let width = window.innerWidth;
-  let height = window.innerHeight * 0.8;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-});
-
 const clock = new THREE.Clock();
 const pointer = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
-
-function animateIntensity(light, from, to, duration = 1000) {
-  const startTime = performance.now();
-
-  function update() {
-    const elapsed = performance.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    light.intensity = from + (to - from) * progress;
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    }
-  }
-
-  update();
-}
-
-function animateBackgroundColor(fromColor, toColor, duration) {
-  const start = performance.now();
-  const colorFrom = new THREE.Color(fromColor);
-  const colorTo = new THREE.Color(toColor);
-
-  function update() {
-    const elapsed = performance.now() - start;
-    const progress = Math.min(elapsed / duration, 1);
-
-    const currentColor = colorFrom.clone().lerp(colorTo, progress);
-    renderer.setClearColor(currentColor);
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    }
-  }
-
-  requestAnimationFrame(update);
-}
-
-function animate() {
-  let delta = clock.getDelta();
-
-  if (fridgeMixer) fridgeMixer.update(delta);
-  if (bananaMixer) bananaMixer.update(delta);
-  if (cherryMixer) cherryMixer.update(delta);
-  if (grapeMixer) grapeMixer.update(delta);
-
-  renderer.render(scene, camera);
-}
-
-renderer.setAnimationLoop(animate);
 
 const hoverLightSwitchText = document.createElement("div");
 hoverLightSwitchText.style.position = "absolute";
@@ -409,10 +306,35 @@ hoverFridgeText.style.padding = "5px";
 hoverFridgeText.style.borderRadius = "5px";
 document.body.appendChild(hoverFridgeText);
 
-window.addEventListener("mousemove", onPointerMove);
+const hoverBananaText = document.createElement("div");
+hoverBananaText.style.position = "absolute";
+hoverBananaText.style.color = "white";
+hoverBananaText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverBananaText.style.padding = "5px";
+hoverBananaText.style.borderRadius = "5px";
+hoverBananaText.innerHTML = "Visit Banana";
+document.body.appendChild(hoverBananaText);
 
-function onPointerMove(event) {
-  if (!lightSwitch || !fridge) return; // return if objects not loaded
+const hoverCherryText = document.createElement("div");
+hoverCherryText.style.position = "absolute";
+hoverCherryText.style.color = "white";
+hoverCherryText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverCherryText.style.padding = "5px";
+hoverCherryText.style.borderRadius = "5px";
+hoverCherryText.innerHTML = "Visit Cherry";
+document.body.appendChild(hoverCherryText);
+
+const hoverGrapeText = document.createElement("div");
+hoverGrapeText.style.position = "absolute";
+hoverGrapeText.style.color = "white";
+hoverGrapeText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverGrapeText.style.padding = "5px";
+hoverGrapeText.style.borderRadius = "5px";
+hoverGrapeText.innerHTML = "Visit Grape";
+document.body.appendChild(hoverGrapeText);
+
+window.addEventListener("mousemove", (event) => {
+  if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
 
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -421,6 +343,9 @@ function onPointerMove(event) {
 
   const intersectsLightSwitch = raycaster.intersectObject(lightSwitch, true);
   const intersectsFridge = raycaster.intersectObject(fridge, true);
+  const intersectsBanana = raycaster.intersectObject(banana, true);
+  const intersectsCherry = raycaster.intersectObject(cherry, true);
+  const intersectsGrape = raycaster.intersectObject(grape, true);
 
   if (intersectsLightSwitch.length > 0) {
     hoverLightSwitchText.style.left = event.clientX + "px";
@@ -442,11 +367,35 @@ function onPointerMove(event) {
   } else {
     hoverFridgeText.style.display = "none";
   }
-}
 
-window.addEventListener("click", onMouseClick, false);
+  if (intersectsBanana.length > 0 && fridgeOpen) {
+    hoverBananaText.style.left = event.clientX + "px";
+    hoverBananaText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverBananaText.style.display = "block";
+  } else {
+    hoverBananaText.style.display = "none";
+  }
 
-function onMouseClick(event) {
+  if (intersectsCherry.length > 0 && fridgeOpen) {
+    hoverCherryText.style.left = event.clientX + "px";
+    hoverCherryText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverCherryText.style.display = "block";
+  } else {
+    hoverCherryText.style.display = "none";
+  }
+
+  if (intersectsGrape.length > 0 && fridgeOpen) {
+    hoverGrapeText.style.left = event.clientX + "px";
+    hoverGrapeText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverGrapeText.style.display = "block";
+  } else {
+    hoverGrapeText.style.display = "none";
+  }
+});
+
+window.addEventListener("click", (event) => {
+  if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
+
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -522,13 +471,64 @@ function onMouseClick(event) {
       animateIntensity(pointLight, 50, 0, 500);
     }
   }
-}
+
+  const bananaIntersect = raycaster.intersectObject(banana, true);
+  if (
+    fridgeOpen &&
+    bananaIntersect.length > 0 &&
+    bananaMesh.includes(bananaIntersect[0].object)
+  ) {
+    // banana clicked
+    window.location.replace("/pages/banana.html");
+  }
+
+  const cherryIntersect = raycaster.intersectObject(cherry, true);
+  if (
+    fridgeOpen &&
+    cherryIntersect.length > 0 &&
+    cherryMesh.includes(cherryIntersect[0].object)
+  ) {
+    // cherry clicked
+    window.location.replace("/pages/cherry.html");
+  }
+
+  const grapeIntersect = raycaster.intersectObject(grape, true);
+  if (
+    fridgeOpen &&
+    grapeIntersect.length > 0 &&
+    grapeMesh.includes(grapeIntersect[0].object)
+  ) {
+    // grape clicked
+    window.location.replace("/pages/grape.html");
+  }
+});
+
+// toggle wireframe button
+let wireframe = false;
+document
+  .getElementById("btnToggleWireframe")
+  .addEventListener("click", function () {
+    wireframe = !wireframe;
+    scene.traverse(function (object) {
+      if (object.isMesh) {
+        object.material.wireframe = wireframe;
+      }
+    });
+  });
+
+// toggle texture button
+document.getElementById("btnRedecorate").addEventListener("click", function () {
+  setTexture();
+});
 
 function playOpenFridgeSfx() {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load("sounds/open-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(2);
+    if (sound.isPlaying) {
+      sound.stop(); // stop before replaying
+    }
     sound.play();
   });
 }
@@ -538,6 +538,9 @@ function playCloseFridgeSfx() {
   audioLoader.load("sounds/close-fridge.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(0.25);
+    if (sound.isPlaying) {
+      sound.stop(); // stop before replaying
+    }
     sound.play();
   });
 }
@@ -547,6 +550,9 @@ function playLightSwitchSfx() {
   audioLoader.load("sounds/light-switch.wav", function (buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(0.5);
+    if (sound.isPlaying) {
+      sound.stop(); // stop before replaying
+    }
     sound.play();
   });
 }
@@ -584,3 +590,52 @@ function applyTextures(material, object) {
   material.roughnessMap = roughness;
   material.needsUpdate = true;
 }
+
+function animateIntensity(light, from, to, duration = 1000) {
+  const startTime = performance.now();
+
+  function update() {
+    const elapsed = performance.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    light.intensity = from + (to - from) * progress;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  update();
+}
+
+function animateBackgroundColor(fromColor, toColor, duration) {
+  const start = performance.now();
+  const colorFrom = new THREE.Color(fromColor);
+  const colorTo = new THREE.Color(toColor);
+
+  function update() {
+    const elapsed = performance.now() - start;
+    const progress = Math.min(elapsed / duration, 1);
+
+    const currentColor = colorFrom.clone().lerp(colorTo, progress);
+    renderer.setClearColor(currentColor);
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function animate() {
+  // update animations
+  let delta = clock.getDelta();
+  if (fridgeMixer) fridgeMixer.update(delta);
+  // if (bananaMixer) bananaMixer.update(delta);
+  // if (cherryMixer) cherryMixer.update(delta);
+  // if (grapeMixer) grapeMixer.update(delta);
+
+  renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop(animate);
