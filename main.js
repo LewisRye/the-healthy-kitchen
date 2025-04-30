@@ -1,6 +1,9 @@
+import $ from "jquery";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+$("#btnCloseFridge").hide();
 
 let scene,
   camera,
@@ -304,6 +307,7 @@ hoverFridgeText.style.color = "white";
 hoverFridgeText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 hoverFridgeText.style.padding = "5px";
 hoverFridgeText.style.borderRadius = "5px";
+hoverFridgeText.innerHTML = "Open Fridge";
 document.body.appendChild(hoverFridgeText);
 
 const hoverBananaText = document.createElement("div");
@@ -355,12 +359,7 @@ window.addEventListener("mousemove", (event) => {
     hoverLightSwitchText.style.display = "none";
   }
 
-  if (intersectsFridge.length > 0) {
-    if (fridgeOpen) {
-      hoverFridgeText.innerHTML = "Close Fridge";
-    } else {
-      hoverFridgeText.innerHTML = "Open Fridge";
-    }
+  if (!fridgeOpen && intersectsFridge.length > 0) {
     hoverFridgeText.style.left = event.clientX + "px";
     hoverFridgeText.style.top = event.clientY - 30 + "px"; // show above the cursor
     hoverFridgeText.style.display = "block";
@@ -368,28 +367,36 @@ window.addEventListener("mousemove", (event) => {
     hoverFridgeText.style.display = "none";
   }
 
-  if (intersectsBanana.length > 0 && fridgeOpen) {
-    hoverBananaText.style.left = event.clientX + "px";
-    hoverBananaText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverBananaText.style.display = "block";
-  } else {
-    hoverBananaText.style.display = "none";
-  }
+  if (fridgeOpen) {
+    if (intersectsBanana.length > 0) {
+      hoverBananaText.style.left = event.clientX + "px";
+      hoverBananaText.style.top = event.clientY - 30 + "px"; // show above the cursor
+      hoverBananaText.style.display = "block";
+    } else {
+      hoverBananaText.style.display = "none";
+    }
 
-  if (intersectsCherry.length > 0 && fridgeOpen) {
-    hoverCherryText.style.left = event.clientX + "px";
-    hoverCherryText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverCherryText.style.display = "block";
-  } else {
-    hoverCherryText.style.display = "none";
-  }
+    if (intersectsCherry.length > 0) {
+      hoverCherryText.style.left = event.clientX + "px";
+      hoverCherryText.style.top = event.clientY - 30 + "px"; // show above the cursor
+      hoverCherryText.style.display = "block";
+    } else {
+      hoverCherryText.style.display = "none";
+    }
 
-  if (intersectsGrape.length > 0 && fridgeOpen) {
-    hoverGrapeText.style.left = event.clientX + "px";
-    hoverGrapeText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverGrapeText.style.display = "block";
+    if (intersectsGrape.length > 0) {
+      hoverGrapeText.style.left = event.clientX + "px";
+      hoverGrapeText.style.top = event.clientY - 30 + "px"; // show above the cursor
+      hoverGrapeText.style.display = "block";
+    } else {
+      hoverGrapeText.style.display = "none";
+    }
+  } else if (intersectsFridge.length > 0) {
+    hoverFridgeText.style.left = event.clientX + "px";
+    hoverFridgeText.style.top = event.clientY - 30 + "px"; // show above the cursor
+    hoverFridgeText.style.display = "block";
   } else {
-    hoverGrapeText.style.display = "none";
+    hoverFridgeText.style.display = "none";
   }
 });
 
@@ -401,54 +408,37 @@ window.addEventListener("click", (event) => {
 
   raycaster.setFromCamera(pointer, camera);
 
-  const fridgeIntersect = raycaster.intersectObject(fridge, true);
-  // fridge clicked
-  if (
-    fridgeIntersect.length > 0 &&
-    fridgeMesh.includes(fridgeIntersect[0].object)
-  ) {
-    if (fridgeActions.length > 0 && fridgeOpen) {
-      camera.position.set(-5, 2.75, 7.5);
-      camera.lookAt(0, 0, 0);
-      animateIntensity(fridgeTopLight, 2, 0, 2000);
-      animateIntensity(fridgeBottomLight, 2, 0, 2000);
+  if (!fridgeOpen) {
+    const fridgeIntersect = raycaster.intersectObject(fridge, true);
+    // fridge clicked
+    if (
+      fridgeIntersect.length > 0 &&
+      fridgeMesh.includes(fridgeIntersect[0].object)
+    ) {
+      if (fridgeActions.length > 0 && !fridgeOpen) {
+        // open the fridge
+        camera.position.set(0, 2, 0);
+        camera.lookAt(0, 0, -10);
 
-      for (let action of fridgeActions) {
-        action.reset();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.timeScale = 1;
-        action.time = 40 / 30;
-        action.play();
+        animateIntensity(fridgeTopLight, 0, 2, 1000);
+        animateIntensity(fridgeBottomLight, 0, 2, 1000);
+        playOpenFridgeSfx();
 
-        setTimeout(() => {
-          action.paused = true;
-          action.time = 0;
-          playCloseFridgeSfx();
-        }, 1800);
+        for (let action of fridgeActions) {
+          action.reset();
+          action.setLoop(THREE.LoopOnce);
+          action.clampWhenFinished = true;
+          action.timeScale = 1;
+          action.play();
+
+          setTimeout(() => {
+            action.paused = true;
+            action.time = 1.33;
+            $("#btnCloseFridge").show();
+          }, 1900);
+        }
+        fridgeOpen = true;
       }
-      fridgeOpen = false;
-    } else if (fridgeActions.length > 0 && !fridgeOpen) {
-      camera.position.set(0, 2, 0);
-      camera.lookAt(0, 0, -10);
-
-      animateIntensity(fridgeTopLight, 0, 2, 1000);
-      animateIntensity(fridgeBottomLight, 0, 2, 1000);
-      playOpenFridgeSfx();
-
-      for (let action of fridgeActions) {
-        action.reset();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.timeScale = 1;
-        action.play();
-
-        setTimeout(() => {
-          action.paused = true;
-          action.time = 1.33;
-        }, 1900);
-      }
-      fridgeOpen = true;
     }
   }
 
@@ -517,8 +507,34 @@ document
   });
 
 // toggle texture button
-document.getElementById("btnRedecorate").addEventListener("click", function () {
+document.getElementById("btnRedecorate").addEventListener("click", () => {
   setTexture();
+});
+
+// close fridge button
+document.getElementById("btnCloseFridge").addEventListener("click", () => {
+  // close the fridge
+  $("#btnCloseFridge").hide();
+  camera.position.set(-5, 2.75, 7.5);
+  camera.lookAt(0, 0, 0);
+  animateIntensity(fridgeTopLight, 2, 0, 2000);
+  animateIntensity(fridgeBottomLight, 2, 0, 2000);
+
+  for (let action of fridgeActions) {
+    action.reset();
+    action.setLoop(THREE.LoopOnce);
+    action.clampWhenFinished = true;
+    action.timeScale = 1;
+    action.time = 40 / 30;
+    action.play();
+
+    setTimeout(() => {
+      action.paused = true;
+      action.time = 0;
+      playCloseFridgeSfx();
+    }, 1800);
+  }
+  fridgeOpen = false;
 });
 
 function playOpenFridgeSfx() {
