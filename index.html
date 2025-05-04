@@ -123,7 +123,6 @@
           style="
             position: absolute;
             bottom: 0;
-            right: 0;
             display: flex;
             overflow-x: auto;
             gap: 10px;
@@ -184,25 +183,34 @@
       <script type="module" src="/main.js"></script>
 
       <!-- for footer -->
-      <hr />
-      <footer class="bg-dark text-white text-center text-lg-start">
+      <footer class="bg-dark text-white text-center text-lg-start mt-4">
+        <hr />
         <div class="container p-4">
           <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
               <h5 class="text-uppercase">Healthy Kitchen</h5>
               <p>
                 A coursework submission for the 'Web 3D Applications' module.
               </p>
             </div>
-            <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
               <h5 class="text-uppercase">Quick Links</h5>
               <ul class="list-unstyled">
-                <li><a href="#" class="text-white">Home</a></li>
                 <li>
-                  <a href="/pages/about.html" class="text-white">About</a>
+                  <a href="#" class="text-white text-decoration-none">Home</a>
                 </li>
                 <li>
-                  <a href="/pages/statement.html" class="text-white"
+                  <a
+                    href="/pages/about.html"
+                    class="text-white text-decoration-none"
+                    >About</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="/pages/statement.html"
+                    class="text-white text-decoration-none"
                     >Statement of Originality</a
                   >
                 </li>

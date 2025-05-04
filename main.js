@@ -474,6 +474,12 @@ window.addEventListener("click", (event) => {
   }
 });
 
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / (window.innerHeight * 0.8);
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight * 0.8);
+});
+
 // toggle wireframe button
 document.getElementById("btnToggleWireframe").addEventListener("click", () => {
   wireframeEnabled = !wireframeEnabled;
