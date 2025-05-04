@@ -421,6 +421,33 @@ window.addEventListener("click", (event) => {
       }
       fridgeOpen = true;
     }
+  } else {
+    const bananaIntersect = raycaster.intersectObject(banana, true);
+    if (
+      bananaIntersect.length > 0 &&
+      bananaMesh.includes(bananaIntersect[0].object)
+    ) {
+      // banana clicked
+      window.location.replace("/pages/banana.html");
+    }
+
+    const cherryIntersect = raycaster.intersectObject(cherry, true);
+    if (
+      cherryIntersect.length > 0 &&
+      cherryMesh.includes(cherryIntersect[0].object)
+    ) {
+      // cherry clicked
+      window.location.replace("/pages/cherry.html");
+    }
+
+    const grapeIntersect = raycaster.intersectObject(grape, true);
+    if (
+      grapeIntersect.length > 0 &&
+      grapeMesh.includes(grapeIntersect[0].object)
+    ) {
+      // grape clicked
+      window.location.replace("/pages/grape.html");
+    }
   }
 
   const switchIntersect = raycaster.intersectObject(lightSwitch, true);
@@ -441,36 +468,6 @@ window.addEventListener("click", (event) => {
       animateIntensity(sunLight, 0, 1, 500);
       animateIntensity(pointLight, 50, 0, 500);
     }
-  }
-
-  const bananaIntersect = raycaster.intersectObject(banana, true);
-  if (
-    fridgeOpen &&
-    bananaIntersect.length > 0 &&
-    bananaMesh.includes(bananaIntersect[0].object)
-  ) {
-    // banana clicked
-    window.location.replace("/pages/banana.html");
-  }
-
-  const cherryIntersect = raycaster.intersectObject(cherry, true);
-  if (
-    fridgeOpen &&
-    cherryIntersect.length > 0 &&
-    cherryMesh.includes(cherryIntersect[0].object)
-  ) {
-    // cherry clicked
-    window.location.replace("/pages/cherry.html");
-  }
-
-  const grapeIntersect = raycaster.intersectObject(grape, true);
-  if (
-    fridgeOpen &&
-    grapeIntersect.length > 0 &&
-    grapeMesh.includes(grapeIntersect[0].object)
-  ) {
-    // grape clicked
-    window.location.replace("/pages/grape.html");
   }
 });
 

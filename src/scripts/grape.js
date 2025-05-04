@@ -1,6 +1,41 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+// load information about grape
+async function getData() {
+  const url = "http://localhost:3000/food/grape";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response Status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    document.getElementById("calories").innerHTML = `${json.calories}cal`;
+    document.getElementById(
+      "carbohydrates"
+    ).innerHTML = `${json.carbohydrates}g`;
+    document.getElementById("countries").innerHTML = json.countries;
+    document.getElementById("description").innerHTML = json.description;
+    document.getElementById("fat").innerHTML = `${json.fat}g`;
+    document.getElementById("fibre").innerHTML = `${json.fibre}g`;
+    document.getElementById("is_gluten_free").innerHTML = json.is_gluten_free
+      ? "✅"
+      : "❌";
+    document.getElementById("is_vegan").innerHTML = json.is_gluten_free
+      ? "✅"
+      : "❌";
+    document.getElementById("protein").innerHTML = `${json.protein}g`;
+    document.getElementById("sugar").innerHTML = `${json.sugar}g`;
+    document.getElementById("type").innerHTML = json.type;
+    document.getElementById("vitamins").innerHTML = json.vitamins;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+getData();
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   90,
