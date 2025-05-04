@@ -210,7 +210,7 @@ loader.load(
 let banana;
 const bananaMesh = [];
 loader.load(
-  "/models/banana.gltf",
+  "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
     banana.scale.set(0.01, 0.01, 0.01);

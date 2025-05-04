@@ -33,7 +33,7 @@ const loader = new GLTFLoader();
 
 const bananaMesh = [];
 loader.load(
-  "/models/banana.gltf",
+  "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
     scene.add(banana);
