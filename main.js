@@ -342,8 +342,9 @@ document.body.appendChild(hoverGrapeText);
 window.addEventListener("mousemove", (event) => {
   if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
 
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  const rect = renderer.domElement.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(pointer, camera);
 
@@ -405,8 +406,9 @@ window.addEventListener("mousemove", (event) => {
 window.addEventListener("click", (event) => {
   if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
 
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  const rect = renderer.domElement.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(pointer, camera);
 
