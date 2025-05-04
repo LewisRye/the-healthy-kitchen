@@ -4,14 +4,14 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   90,
-  window.innerWidth / window.innerHeight,
+  window.innerWidth / 2 / window.innerHeight,
   0.1,
   1000
 );
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x87ceeb);
+renderer.setSize(window.innerWidth / 2, window.innerHeight);
+renderer.setClearColor(0x212529);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -19,10 +19,10 @@ const container = document.getElementById("three-container");
 container.appendChild(renderer.domElement);
 
 // add lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+const sunLight = new THREE.DirectionalLight(0xffffff, 2.5);
 sunLight.position.set(-5, 2.5, 5);
 scene.add(sunLight);
 
@@ -36,6 +36,8 @@ loader.load(
   "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
+    banana.scale.set(3, 3, 3);
+    banana.rotation.x = 90;
     scene.add(banana);
 
     banana.traverse((child) => {
@@ -66,7 +68,7 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 
 function animate() {
   if (banana) {
-    banana.rotation.y += 0.005;
+    banana.rotation.z += 0.0025;
   }
 
   renderer.render(scene, camera);
@@ -75,7 +77,7 @@ renderer.setAnimationLoop(animate);
 
 // a function that checks for window resize events
 window.addEventListener("resize", () => {
-  const width = window.innerWidth;
+  const width = window.innerWidth / 2;
   const height = window.innerHeight;
   renderer.setSize(width, height);
   camera.aspect = width / height;

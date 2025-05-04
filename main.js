@@ -213,9 +213,10 @@ loader.load(
   "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
-    banana.scale.set(0.01, 0.01, 0.01);
-    banana.position.set(0, 1.5, -4.5);
-    banana.rotateZ(80);
+    banana.position.set(0, 1.6, -4.5);
+    banana.scale.set(0.025, 0.025, 0.025);
+    banana.rotateX(90);
+    banana.rotateY(80);
     scene.add(banana);
 
     // for raycasting
