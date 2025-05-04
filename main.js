@@ -313,30 +313,33 @@ hoverFridgeText.innerHTML = "Open Fridge";
 document.body.appendChild(hoverFridgeText);
 
 const hoverBananaText = document.createElement("div");
+hoverBananaText.style.display = "none";
 hoverBananaText.style.position = "absolute";
 hoverBananaText.style.color = "white";
 hoverBananaText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 hoverBananaText.style.padding = "5px";
 hoverBananaText.style.borderRadius = "5px";
-hoverBananaText.innerHTML = "Visit Banana";
+hoverBananaText.innerHTML = "View Banana Info";
 document.body.appendChild(hoverBananaText);
 
 const hoverCherryText = document.createElement("div");
+hoverCherryText.style.display = "none";
 hoverCherryText.style.position = "absolute";
 hoverCherryText.style.color = "white";
 hoverCherryText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 hoverCherryText.style.padding = "5px";
 hoverCherryText.style.borderRadius = "5px";
-hoverCherryText.innerHTML = "Visit Cherry";
+hoverCherryText.innerHTML = "View Cherry Info";
 document.body.appendChild(hoverCherryText);
 
 const hoverGrapeText = document.createElement("div");
+hoverGrapeText.style.display = "none";
 hoverGrapeText.style.position = "absolute";
 hoverGrapeText.style.color = "white";
 hoverGrapeText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 hoverGrapeText.style.padding = "5px";
 hoverGrapeText.style.borderRadius = "5px";
-hoverGrapeText.innerHTML = "Visit Grape";
+hoverGrapeText.innerHTML = "View Grape Info";
 document.body.appendChild(hoverGrapeText);
 
 window.addEventListener("mousemove", (event) => {

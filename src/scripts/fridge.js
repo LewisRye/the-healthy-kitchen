@@ -4,13 +4,13 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   90,
-  window.innerWidth / 2 / (window.innerHeight * 0.75),
+  window.innerWidth / 2 / window.innerHeight,
   0.1,
   1000
 );
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth / 2, window.innerHeight * 0.75);
+renderer.setSize(window.innerWidth / 2, window.innerHeight);
 renderer.setClearColor(0x212529);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -77,7 +77,7 @@ renderer.setAnimationLoop(animate);
 // a function that checks for window resize events
 window.addEventListener("resize", () => {
   const width = window.innerWidth / 2;
-  const height = window.innerHeight * 0.75;
+  const height = window.innerHeight;
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
