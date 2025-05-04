@@ -43,6 +43,8 @@ container.appendChild(renderer.domElement);
 const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(-5, 2.75, 7.5);
 camera.lookAt(0, 0, 0);
+orbit.maxDistance = 33;
+orbit.minDistance = 2.5;
 orbit.update();
 
 // add lighting
@@ -357,52 +359,24 @@ window.addEventListener("mousemove", (event) => {
   const intersectsCherry = raycaster.intersectObject(cherry, true);
   const intersectsGrape = raycaster.intersectObject(grape, true);
 
-  if (intersectsLightSwitch.length > 0) {
-    hoverLightSwitchText.style.left = event.clientX + "px";
-    hoverLightSwitchText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverLightSwitchText.style.display = "block";
-  } else {
-    hoverLightSwitchText.style.display = "none";
-  }
-
-  if (!fridgeOpen && intersectsFridge.length > 0) {
-    hoverFridgeText.style.left = event.clientX + "px";
-    hoverFridgeText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverFridgeText.style.display = "block";
-  } else {
-    hoverFridgeText.style.display = "none";
+  function updateHoverTooltip(intersects, element) {
+    if (intersects.length > 0) {
+      element.style.left = event.clientX + "px";
+      element.style.top = event.clientY - 30 + "px";
+      element.style.display = "block";
+    } else {
+      element.style.display = "none";
+    }
   }
 
   if (fridgeOpen) {
-    if (intersectsBanana.length > 0) {
-      hoverBananaText.style.left = event.clientX + "px";
-      hoverBananaText.style.top = event.clientY - 30 + "px"; // show above the cursor
-      hoverBananaText.style.display = "block";
-    } else {
-      hoverBananaText.style.display = "none";
-    }
-
-    if (intersectsCherry.length > 0) {
-      hoverCherryText.style.left = event.clientX + "px";
-      hoverCherryText.style.top = event.clientY - 30 + "px"; // show above the cursor
-      hoverCherryText.style.display = "block";
-    } else {
-      hoverCherryText.style.display = "none";
-    }
-
-    if (intersectsGrape.length > 0) {
-      hoverGrapeText.style.left = event.clientX + "px";
-      hoverGrapeText.style.top = event.clientY - 30 + "px"; // show above the cursor
-      hoverGrapeText.style.display = "block";
-    } else {
-      hoverGrapeText.style.display = "none";
-    }
-  } else if (intersectsFridge.length > 0) {
-    hoverFridgeText.style.left = event.clientX + "px";
-    hoverFridgeText.style.top = event.clientY - 30 + "px"; // show above the cursor
-    hoverFridgeText.style.display = "block";
-  } else {
     hoverFridgeText.style.display = "none";
+    updateHoverTooltip(intersectsBanana, hoverBananaText);
+    updateHoverTooltip(intersectsCherry, hoverCherryText);
+    updateHoverTooltip(intersectsGrape, hoverGrapeText);
+  } else {
+    updateHoverTooltip(intersectsFridge, hoverFridgeText);
+    updateHoverTooltip(intersectsLightSwitch, hoverLightSwitchText);
   }
 });
 
