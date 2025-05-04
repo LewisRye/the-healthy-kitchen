@@ -71,111 +71,6 @@ fridgeBottomLight.position.set(0, 2.5, -4);
 fridgeBottomLight.intensity = 0;
 scene.add(fridgeBottomLight);
 
-const textureLoader = new THREE.TextureLoader();
-
-// add floor
-const floorGeometry = new THREE.BoxGeometry(10, 10, 0.05);
-const floorMaterial = new THREE.MeshStandardMaterial({
-  roughness: 0.75,
-  metalness: 0.25,
-});
-
-const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.rotation.x = -Math.PI / 2;
-scene.add(floor);
-
-// add wall texture
-const wallGeometry = new THREE.BoxGeometry(10, 5, 0.05);
-const wallMaterial = new THREE.MeshStandardMaterial({
-  roughness: 0.75,
-  metalness: 0.5,
-});
-
-// add back wall
-const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
-backWall.position.set(0, 2.5, -5);
-scene.add(backWall);
-
-// add right wall
-const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
-rightWall.position.set(5, 2.5, 0);
-rightWall.rotation.y = -Math.PI / 2;
-scene.add(rightWall);
-
-// add cupboards
-const shortCupboardGeometry = new THREE.BoxGeometry(1.25, 1.5, 1);
-const longCupboardGeometry = new THREE.BoxGeometry(4, 1.5, 1);
-const cupboardMaterial = new THREE.MeshStandardMaterial({
-  color: 0x8b8b8b,
-  roughness: 0.75,
-  metalness: 0.75,
-});
-
-const cupboard1 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
-cupboard1.position.set(3, 0.75, -4.5);
-cupboard1.castShadow = true;
-cupboard1.receiveShadow = true;
-scene.add(cupboard1);
-
-const cupboard2 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
-cupboard2.position.set(1.65, 3, -4.5);
-cupboard2.castShadow = true;
-cupboard2.receiveShadow = true;
-scene.add(cupboard2);
-
-const cupboard3 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
-cupboard3.position.set(4.35, 3, -4.5);
-cupboard3.castShadow = true;
-cupboard3.receiveShadow = true;
-scene.add(cupboard3);
-
-const cupboard4 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
-cupboard4.position.set(4.5, 0.75, -3);
-cupboard4.rotation.y = -Math.PI / 2;
-cupboard4.castShadow = true;
-cupboard4.receiveShadow = true;
-scene.add(cupboard4);
-
-// create door texture
-const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
-const doorMaterial = new THREE.MeshStandardMaterial({
-  roughness: 0.5,
-  metalness: 0.1,
-});
-
-// create door
-const door = new THREE.Mesh(doorGeometry, doorMaterial);
-door.position.set(4.95, 1.5, 2.5);
-door.rotation.y = -Math.PI / 2;
-scene.add(door);
-
-// add handle to door
-const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 32);
-const handleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
-const handle = new THREE.Mesh(handleGeometry, handleMaterial);
-handle.rotation.z = Math.PI / 2;
-handle.position.set(4.85, 1.5, 2);
-scene.add(handle);
-
-// add light switch
-const toggleGeometry = new THREE.BoxGeometry(0.1, 1, 0.75);
-const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
-const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
-lightSwitch.position.set(4.9, 2, 0.8);
-const switchMesh = [];
-lightSwitch.traverse((child) => {
-  if (child.isMesh) {
-    switchMesh.push(child);
-  }
-});
-scene.add(lightSwitch);
-
-const textureList = ["wood", "stone", "tiles"]; // all textures
-// begin with the texture at the back of the list, this is to
-// ensure that when calling setTexture, the first texture is set
-let currentTexture = textureList[textureList.length - 1];
-setTexture();
-
 // load all models
 const loader = new GLTFLoader();
 
@@ -275,6 +170,8 @@ loader.load(
     grape.traverse((child) => {
       if (child.isMesh) {
         grapeMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
   },
@@ -283,6 +180,114 @@ loader.load(
     console.error(error);
   }
 );
+
+// load textures
+const textureLoader = new THREE.TextureLoader();
+
+// add floor
+const floorGeometry = new THREE.BoxGeometry(10, 10, 0.05);
+const floorMaterial = new THREE.MeshStandardMaterial({
+  roughness: 0.75,
+  metalness: 0.25,
+});
+
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+floor.rotation.x = -Math.PI / 2;
+scene.add(floor);
+
+// add wall texture
+const wallGeometry = new THREE.BoxGeometry(10, 5, 0.05);
+const wallMaterial = new THREE.MeshStandardMaterial({
+  roughness: 0.75,
+  metalness: 0.5,
+});
+
+// add back wall
+const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+backWall.position.set(0, 2.5, -5);
+scene.add(backWall);
+
+// add right wall
+const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+rightWall.position.set(5, 2.5, 0);
+rightWall.rotation.y = -Math.PI / 2;
+scene.add(rightWall);
+
+// add cupboards
+const shortCupboardGeometry = new THREE.BoxGeometry(1.25, 1.5, 1);
+const longCupboardGeometry = new THREE.BoxGeometry(4, 1.5, 1);
+const cupboardMaterial = new THREE.MeshStandardMaterial({
+  color: 0x8b8b8b,
+  roughness: 0.75,
+  metalness: 0.75,
+});
+
+const cupboard1 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
+cupboard1.position.set(3, 0.75, -4.5);
+cupboard1.castShadow = true;
+cupboard1.receiveShadow = true;
+scene.add(cupboard1);
+
+const cupboard2 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
+cupboard2.position.set(1.65, 3, -4.5);
+cupboard2.castShadow = true;
+cupboard2.receiveShadow = true;
+scene.add(cupboard2);
+
+const cupboard3 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
+cupboard3.position.set(4.35, 3, -4.5);
+cupboard3.castShadow = true;
+cupboard3.receiveShadow = true;
+scene.add(cupboard3);
+
+const cupboard4 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
+cupboard4.position.set(4.5, 0.75, -3);
+cupboard4.rotation.y = -Math.PI / 2;
+cupboard4.castShadow = true;
+cupboard4.receiveShadow = true;
+scene.add(cupboard4);
+
+// create door texture
+const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
+const doorMaterial = new THREE.MeshStandardMaterial({
+  roughness: 0.5,
+  metalness: 0.1,
+});
+
+// create door
+const door = new THREE.Mesh(doorGeometry, doorMaterial);
+door.position.set(4.95, 1.5, 2.5);
+door.rotation.y = -Math.PI / 2;
+scene.add(door);
+
+// add handle to door
+const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 32);
+const handleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+const handle = new THREE.Mesh(handleGeometry, handleMaterial);
+handle.rotation.z = Math.PI / 2;
+handle.position.set(4.85, 1.5, 2);
+scene.add(handle);
+
+// add light switch
+const toggleGeometry = new THREE.BoxGeometry(0.1, 1, 0.75);
+const toggleMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+const lightSwitch = new THREE.Mesh(toggleGeometry, toggleMaterial);
+lightSwitch.position.set(4.9, 2, 0.8);
+const switchMesh = [];
+lightSwitch.traverse((child) => {
+  if (child.isMesh) {
+    switchMesh.push(child);
+    child.castShadow = true;
+    child.receiveShadow = true;
+  }
+});
+scene.add(lightSwitch);
+
+const textureList = ["wood", "stone", "tiles"]; // all textures
+// begin with the texture at the back of the list, this is to
+// ensure that when calling setTexture, the first texture is set
+let currentTexture = textureList[textureList.length - 1];
+setTexture();
 
 // add and receive shadows from all mesh objects
 scene.traverse((node) => {
