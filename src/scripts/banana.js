@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 // load information about banana
 async function getData() {
@@ -39,19 +40,21 @@ getData();
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   90,
-  window.innerWidth / 2 / window.innerHeight,
+  (window.innerWidth * 0.25) / (window.innerHeight * 0.55),
   0.1,
   1000
 );
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth / 2, window.innerHeight);
+renderer.setSize(window.innerWidth * 0.25, window.innerHeight * 0.55);
 renderer.setClearColor(0x212529);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const container = document.getElementById("three-container");
 container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // add lighting
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -71,7 +74,8 @@ loader.load(
   "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
-    banana.scale.set(3, 3, 3);
+    banana.scale.set(4, 4, 4);
+    banana.position.set(0, 0, 0);
     banana.rotation.x = 90;
     scene.add(banana);
 
@@ -102,18 +106,15 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 });
 
 function animate() {
-  if (banana) {
-    banana.rotation.z -= 0.0025;
-  }
-
+  controls.update();
   renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
 
 // a function that checks for window resize events
 window.addEventListener("resize", () => {
-  const width = window.innerWidth / 2;
-  const height = window.innerHeight;
+  const width = window.innerWidth * 0.25;
+  const height = window.innerHeight * 0.55;
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
