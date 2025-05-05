@@ -60,9 +60,22 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-const sunLight = new THREE.DirectionalLight(0xffffff, 2.5);
-sunLight.position.set(-5, 2.5, 5);
-scene.add(sunLight);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+keyLight.position.set(10, 10, 10);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.width = 2048;
+keyLight.shadow.mapSize.height = 2048;
+keyLight.shadow.camera.near = 0.5;
+keyLight.shadow.camera.far = 500;
+scene.add(keyLight);
+
+const fillLight = new THREE.PointLight(0xffffff, 0.4);
+fillLight.position.set(-10, 5, 5);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.7);
+rimLight.position.set(0, 5, -10);
+scene.add(rimLight);
 
 let grape;
 let wireframeEnabled = false;

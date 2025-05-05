@@ -112,8 +112,8 @@ loader.load(
     banana = gltf.scene;
     banana.position.set(0, 1.6, -4.5);
     banana.scale.set(0.025, 0.025, 0.025);
-    banana.rotateX(90);
-    banana.rotateY(80);
+    banana.rotateX(90 * (Math.PI / 180));
+    banana.rotateY(90 * (Math.PI / 180));
     scene.add(banana);
 
     // for raycasting
