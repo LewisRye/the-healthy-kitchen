@@ -110,9 +110,9 @@ loader.load(
   "/models/banana.glb",
   (gltf) => {
     banana = gltf.scene;
-    banana.position.set(0, 1.6, -4.5);
+    banana.position.set(0, 1.5, -4.5);
     banana.scale.set(0.025, 0.025, 0.025);
-    banana.rotateX(90 * (Math.PI / 180));
+    banana.rotateX(45 * (Math.PI / 180));
     banana.rotateY(90 * (Math.PI / 180));
     scene.add(banana);
 
@@ -310,6 +310,15 @@ hoverLightSwitchText.style.borderRadius = "5px";
 hoverLightSwitchText.innerHTML = "Toggle Lights";
 document.body.appendChild(hoverLightSwitchText);
 
+const hoverCupboardText = document.createElement("div");
+hoverCupboardText.style.position = "absolute";
+hoverCupboardText.style.color = "white";
+hoverCupboardText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverCupboardText.style.padding = "5px";
+hoverCupboardText.style.borderRadius = "5px";
+hoverCupboardText.innerHTML = "Chopping Board";
+document.body.appendChild(hoverCupboardText);
+
 const hoverFridgeText = document.createElement("div");
 hoverFridgeText.style.position = "absolute";
 hoverFridgeText.style.color = "white";
@@ -359,6 +368,7 @@ window.addEventListener("mousemove", (event) => {
   raycaster.setFromCamera(pointer, camera);
 
   const intersectsLightSwitch = raycaster.intersectObject(lightSwitch, true);
+  const intersectsCupboard = raycaster.intersectObject(cupboard1, true);
   const intersectsFridge = raycaster.intersectObject(fridge, true);
   const intersectsBanana = raycaster.intersectObject(banana, true);
   const intersectsCherry = raycaster.intersectObject(cherry, true);
@@ -382,6 +392,7 @@ window.addEventListener("mousemove", (event) => {
   } else {
     updateHoverTooltip(intersectsFridge, hoverFridgeText);
     updateHoverTooltip(intersectsLightSwitch, hoverLightSwitchText);
+    updateHoverTooltip(intersectsCupboard, hoverCupboardText);
   }
 });
 
@@ -407,8 +418,8 @@ window.addEventListener("click", (event) => {
 
       orbit.enabled = false; // prevent camera from moving
 
-      animateIntensity(fridgeTopLight, 0, 2, 1000);
-      animateIntensity(fridgeBottomLight, 0, 2, 1000);
+      animateIntensity(fridgeTopLight, 0, 1, 1000);
+      animateIntensity(fridgeBottomLight, 0, 1, 1000);
       playOpenFridgeSfx();
 
       for (let action of fridgeActions) {
@@ -474,6 +485,12 @@ window.addEventListener("click", (event) => {
       animateIntensity(pointLight, 50, 0, 500);
     }
   }
+
+  const cupboardIntersect = raycaster.intersectObject(cupboard1, true);
+  if (cupboardIntersect.length > 0) {
+    // cupboard clicked
+    window.location.replace("/pages/cut.html");
+  }
 });
 
 window.addEventListener("resize", () => {
@@ -506,8 +523,8 @@ document.getElementById("btnCloseFridge").addEventListener("click", () => {
 
   camera.position.set(-5, 2.75, 7.5);
   camera.lookAt(0, 0, 0);
-  animateIntensity(fridgeTopLight, 2, 0, 2000);
-  animateIntensity(fridgeBottomLight, 2, 0, 2000);
+  animateIntensity(fridgeTopLight, 1, 0, 2000);
+  animateIntensity(fridgeBottomLight, 1, 0, 2000);
 
   for (let action of fridgeActions) {
     action.reset();
@@ -636,9 +653,6 @@ function animate() {
   // update animations
   let delta = clock.getDelta();
   if (fridgeMixer) fridgeMixer.update(delta);
-  // if (bananaMixer) bananaMixer.update(delta);
-  // if (cherryMixer) cherryMixer.update(delta);
-  // if (grapeMixer) grapeMixer.update(delta);
 
   renderer.render(scene, camera);
 }
