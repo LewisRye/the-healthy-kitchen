@@ -111,7 +111,7 @@ hoverBananaText.innerHTML = "Cut Open";
 document.body.appendChild(hoverBananaText);
 
 window.addEventListener("mousemove", (event) => {
-  if (!banana) return; // return if object not loaded
+  if (!banana || cutComplete) return; // return if object not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -139,7 +139,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
 window.addEventListener("click", (event) => {
-  if (!banana) return;
+  if (!banana || cutComplete) return; // return if object not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -155,13 +155,9 @@ window.addEventListener("click", (event) => {
       action.clampWhenFinished = true;
       action.timeScale = 1;
       action.play();
-
-      setTimeout(() => {
-        action.paused = true;
-        action.time = 2.5;
-      }, 2500);
     }
     cutComplete = true;
+    hoverBananaText.style.display = "none";
   }
 });
 
