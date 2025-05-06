@@ -308,7 +308,6 @@ scene.add(cupboard4);
 scene.add(door);
 scene.add(handle);
 scene.add(lightSwitch);
-scene.add(stars);
 
 const textureList = ["wood", "stone", "tiles"]; // all textures
 // begin with the texture at the back of the list, this is to
@@ -507,10 +506,12 @@ window.addEventListener("click", (event) => {
       animateBackgroundColor(0x87ceeb, 0x070b34, 500);
       animateIntensity(sunLight, 1, 0, 500);
       animateIntensity(pointLight, 0, 50, 500);
+      scene.add(stars);
     } else {
       animateBackgroundColor(0x070b34, 0x87ceeb, 500);
       animateIntensity(sunLight, 0, 1, 500);
       animateIntensity(pointLight, 50, 0, 500);
+      scene.remove(stars);
     }
   }
 
