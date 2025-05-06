@@ -119,6 +119,9 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 });
 
 function animate() {
+  if (!banana) return;
+
+  banana.rotation.z -= 0.001;
   controls.update();
   renderer.render(scene, camera);
 }

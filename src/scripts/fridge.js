@@ -83,6 +83,9 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 });
 
 function animate() {
+  if (!fridge) return;
+
+  fridge.rotation.y += 0.001;
   controls.update();
   renderer.render(scene, camera);
 }

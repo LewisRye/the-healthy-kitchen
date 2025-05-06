@@ -118,6 +118,9 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 });
 
 function animate() {
+  if (!grape) return;
+
+  grape.rotation.y += 0.001;
   controls.update();
   renderer.render(scene, camera);
 }
