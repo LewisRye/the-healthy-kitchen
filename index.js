@@ -428,13 +428,14 @@ window.addEventListener("click", (event) => {
         action.setLoop(THREE.LoopOnce);
         action.clampWhenFinished = true;
         action.timeScale = 1;
+        action.time = 0;
         action.play();
 
         setTimeout(() => {
           action.paused = true;
-          action.time = 1.33;
+          action.time = 1.5;
           $("#btnCloseFridge").show();
-        }, 1900);
+        }, 1500);
       }
       fridgeOpen = true;
     }
@@ -524,22 +525,22 @@ document.getElementById("btnCloseFridge").addEventListener("click", () => {
 
   camera.position.set(-5, 2.75, 7.5);
   camera.lookAt(0, 0, 0);
-  animateIntensity(fridgeTopLight, 1, 0, 2000);
-  animateIntensity(fridgeBottomLight, 1, 0, 2000);
+  animateIntensity(fridgeTopLight, 1, 0, 800);
+  animateIntensity(fridgeBottomLight, 1, 0, 800);
 
   for (let action of fridgeActions) {
     action.reset();
     action.setLoop(THREE.LoopOnce);
     action.clampWhenFinished = true;
-    action.timeScale = 1;
-    action.time = 40 / 30;
+    action.timeScale = 2;
+    action.time = 1.5;
     action.play();
 
     setTimeout(() => {
       action.paused = true;
       action.time = 0;
       playCloseFridgeSfx();
-    }, 1800);
+    }, 800);
   }
   fridgeOpen = false;
 });
