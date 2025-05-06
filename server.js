@@ -46,19 +46,19 @@ db.serialize(() => {
           fibre, sugar, vitamins, is_vegan, is_gluten_free, countries
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          "banana",
-          "fruit",
-          "a yellow fruit",
-          89.0,
-          23,
-          1.1,
+          "Apple",
+          "Fruit",
+          "An apple is a round and sweet fruit with smooth skin. Typically red, green, or yellow. It has a crisp flesh and a core containing small brown seeds.",
+          52.0,
+          14,
           0.3,
-          2.6,
-          12.0,
-          "fibre, potassium, vitamin B6, vitamin C",
+          0.2,
+          2.4,
+          10.0,
+          "potassium, vitamin C, vitamin K",
           true,
           true,
-          "Malaysia, Indonesia, Philippines",
+          "China, Turkey, United States, Poland, India",
         ]
       );
 
@@ -68,9 +68,31 @@ db.serialize(() => {
           fibre, sugar, vitamins, is_vegan, is_gluten_free, countries
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          "cherry",
-          "fruit",
-          "a red fruit",
+          "Banana",
+          "Fruit",
+          "A banana is a long, curved fruit with a soft interior and a smooth yellow peel. It grows in clusters.",
+          89.0,
+          23,
+          1.1,
+          0.3,
+          2.6,
+          12.0,
+          "fibre, potassium, vitamin B6, vitamin C",
+          true,
+          true,
+          "India, China, Indonesia, Brazil, Ecuador",
+        ]
+      );
+
+      db.run(
+        `INSERT INTO food (
+          name, type, description, calories, carbohydrates, protein, fat,
+          fibre, sugar, vitamins, is_vegan, is_gluten_free, countries
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          "Cherry",
+          "Fruit",
+          "A red fruit",
           50.0,
           12,
           1.1,
@@ -81,28 +103,6 @@ db.serialize(() => {
           true,
           true,
           "Anatolia",
-        ]
-      );
-
-      db.run(
-        `INSERT INTO food (
-          name, type, description, calories, carbohydrates, protein, fat,
-          fibre, sugar, vitamins, is_vegan, is_gluten_free, countries
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          "grape",
-          "fruit",
-          "a fruit that can be red, green or purple",
-          67.0,
-          17,
-          0.6,
-          0.4,
-          0.9,
-          16.0,
-          "potassium, vitamin C, vitamin K",
-          true,
-          true,
-          "Armenia",
         ]
       );
     }
@@ -131,14 +131,18 @@ app.get("/", (req, res) => {
 app.get("/food/:name", (req, res) => {
   const name = req.params.name;
 
-  db.get("SELECT * FROM food WHERE name = ?;", [name], (err, rows) => {
-    if (err) {
-      res.status(500).send("Database error");
-      return;
-    }
+  db.get(
+    "SELECT * FROM food WHERE name = ? COLLATE NOCASE;",
+    [name],
+    (err, rows) => {
+      if (err) {
+        res.status(500).send("Database error");
+        return;
+      }
 
-    res.send(rows);
-  });
+      res.send(rows);
+    }
+  );
 });
 
 app.listen(port, () => {

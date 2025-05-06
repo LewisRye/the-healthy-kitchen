@@ -47,30 +47,6 @@ orbit.maxDistance = 33;
 orbit.minDistance = 2.5;
 orbit.update();
 
-// add lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-scene.add(ambientLight);
-
-const sunLight = new THREE.DirectionalLight(0xffffff, 1);
-sunLight.position.set(-20, 5, 20);
-sunLight.castShadow = true;
-scene.add(sunLight);
-
-const pointLight = new THREE.PointLight(0xffffff, 0);
-pointLight.position.set(0, 5, 0);
-pointLight.castShadow = true;
-scene.add(pointLight);
-
-const fridgeTopLight = new THREE.PointLight(0xffffff, 1);
-fridgeTopLight.position.set(0, 1.3, -4);
-fridgeTopLight.intensity = 0;
-scene.add(fridgeTopLight);
-
-const fridgeBottomLight = new THREE.PointLight(0xffffff, 1);
-fridgeBottomLight.position.set(0, 2.5, -4);
-fridgeBottomLight.intensity = 0;
-scene.add(fridgeBottomLight);
-
 // load all models
 const loader = new GLTFLoader();
 
@@ -104,6 +80,31 @@ loader.load(
   }
 );
 
+let apple;
+const appleMesh = [];
+loader.load(
+  "/models/apple.glb",
+  (gltf) => {
+    apple = gltf.scene;
+    apple.scale.set(0.015, 0.015, 0.015);
+    apple.position.set(0, 0.1, -4.5);
+    scene.add(apple);
+
+    // for raycasting
+    apple.traverse((child) => {
+      if (child.isMesh) {
+        appleMesh.push(child);
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  },
+  undefined,
+  (error) => {
+    console.error(error);
+  }
+);
+
 let banana;
 const bananaMesh = [];
 loader.load(
@@ -111,7 +112,7 @@ loader.load(
   (gltf) => {
     banana = gltf.scene;
     banana.position.set(0, 1.5, -4.5);
-    banana.scale.set(0.025, 0.025, 0.025);
+    banana.scale.set(0.02, 0.02, 0.02);
     banana.rotateX(45 * (Math.PI / 180));
     banana.rotateY(90 * (Math.PI / 180));
     scene.add(banana);
@@ -156,30 +157,29 @@ loader.load(
   }
 );
 
-let grape;
-const grapeMesh = [];
-loader.load(
-  "/models/grape.gltf",
-  (gltf) => {
-    grape = gltf.scene;
-    grape.scale.set(0.05, 0.04, 0.05);
-    grape.position.set(0, 0.1, -4.5);
-    scene.add(grape);
+// add lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
 
-    // for raycasting
-    grape.traverse((child) => {
-      if (child.isMesh) {
-        grapeMesh.push(child);
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-  },
-  undefined,
-  (error) => {
-    console.error(error);
-  }
-);
+const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+sunLight.position.set(-20, 5, 20);
+sunLight.castShadow = true;
+scene.add(sunLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 0);
+pointLight.position.set(0, 5, 0);
+pointLight.castShadow = true;
+scene.add(pointLight);
+
+const fridgeTopLight = new THREE.PointLight(0xffffff, 1);
+fridgeTopLight.position.set(0, 1.3, -4);
+fridgeTopLight.intensity = 0;
+scene.add(fridgeTopLight);
+
+const fridgeBottomLight = new THREE.PointLight(0xffffff, 1);
+fridgeBottomLight.position.set(0, 2.5, -4);
+fridgeBottomLight.intensity = 0;
+scene.add(fridgeBottomLight);
 
 // load textures
 const textureLoader = new THREE.TextureLoader();
@@ -193,7 +193,6 @@ const floorMaterial = new THREE.MeshStandardMaterial({
 
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.rotation.x = -Math.PI / 2;
-scene.add(floor);
 
 // add wall texture
 const wallGeometry = new THREE.BoxGeometry(10, 5, 0.05);
@@ -205,13 +204,11 @@ const wallMaterial = new THREE.MeshStandardMaterial({
 // add back wall
 const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
 backWall.position.set(0, 2.5, -5);
-scene.add(backWall);
 
 // add right wall
 const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
 rightWall.position.set(5, 2.5, 0);
 rightWall.rotation.y = -Math.PI / 2;
-scene.add(rightWall);
 
 // add cupboards
 const shortCupboardGeometry = new THREE.BoxGeometry(1.25, 1.5, 1);
@@ -226,26 +223,22 @@ const cupboard1 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
 cupboard1.position.set(3, 0.75, -4.5);
 cupboard1.castShadow = true;
 cupboard1.receiveShadow = true;
-scene.add(cupboard1);
 
 const cupboard2 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
 cupboard2.position.set(1.65, 3, -4.5);
 cupboard2.castShadow = true;
 cupboard2.receiveShadow = true;
-scene.add(cupboard2);
 
 const cupboard3 = new THREE.Mesh(shortCupboardGeometry, cupboardMaterial);
 cupboard3.position.set(4.35, 3, -4.5);
 cupboard3.castShadow = true;
 cupboard3.receiveShadow = true;
-scene.add(cupboard3);
 
 const cupboard4 = new THREE.Mesh(longCupboardGeometry, cupboardMaterial);
 cupboard4.position.set(4.5, 0.75, -3);
 cupboard4.rotation.y = -Math.PI / 2;
 cupboard4.castShadow = true;
 cupboard4.receiveShadow = true;
-scene.add(cupboard4);
 
 // create door texture
 const doorGeometry = new THREE.BoxGeometry(1.8, 3, 0.1);
@@ -258,7 +251,6 @@ const doorMaterial = new THREE.MeshStandardMaterial({
 const door = new THREE.Mesh(doorGeometry, doorMaterial);
 door.position.set(4.95, 1.5, 2.5);
 door.rotation.y = -Math.PI / 2;
-scene.add(door);
 
 // add handle to door
 const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 32);
@@ -266,7 +258,6 @@ const handleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
 const handle = new THREE.Mesh(handleGeometry, handleMaterial);
 handle.rotation.z = Math.PI / 2;
 handle.position.set(4.85, 1.5, 2);
-scene.add(handle);
 
 // add light switch
 const toggleGeometry = new THREE.BoxGeometry(0.1, 1, 0.75);
@@ -281,6 +272,16 @@ lightSwitch.traverse((child) => {
     child.receiveShadow = true;
   }
 });
+
+scene.add(floor);
+scene.add(backWall);
+scene.add(rightWall);
+scene.add(cupboard1);
+scene.add(cupboard2);
+scene.add(cupboard3);
+scene.add(cupboard4);
+scene.add(door);
+scene.add(handle);
 scene.add(lightSwitch);
 
 const textureList = ["wood", "stone", "tiles"]; // all textures
@@ -348,18 +349,18 @@ hoverCherryText.style.borderRadius = "5px";
 hoverCherryText.innerHTML = "View Cherry Info";
 document.body.appendChild(hoverCherryText);
 
-const hoverGrapeText = document.createElement("div");
-hoverGrapeText.style.display = "none";
-hoverGrapeText.style.position = "absolute";
-hoverGrapeText.style.color = "white";
-hoverGrapeText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-hoverGrapeText.style.padding = "5px";
-hoverGrapeText.style.borderRadius = "5px";
-hoverGrapeText.innerHTML = "View Grape Info";
-document.body.appendChild(hoverGrapeText);
+const hoverAppleText = document.createElement("div");
+hoverAppleText.style.display = "none";
+hoverAppleText.style.position = "absolute";
+hoverAppleText.style.color = "white";
+hoverAppleText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverAppleText.style.padding = "5px";
+hoverAppleText.style.borderRadius = "5px";
+hoverAppleText.innerHTML = "View Apple Info";
+document.body.appendChild(hoverAppleText);
 
 window.addEventListener("mousemove", (event) => {
-  if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
+  if (!lightSwitch || !fridge || !banana || !cherry || !apple) return; // return if objects not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -372,7 +373,7 @@ window.addEventListener("mousemove", (event) => {
   const intersectsFridge = raycaster.intersectObject(fridge, true);
   const intersectsBanana = raycaster.intersectObject(banana, true);
   const intersectsCherry = raycaster.intersectObject(cherry, true);
-  const intersectsGrape = raycaster.intersectObject(grape, true);
+  const intersectsApple = raycaster.intersectObject(apple, true);
 
   function updateHoverTooltip(intersects, element) {
     if (intersects.length > 0) {
@@ -388,7 +389,7 @@ window.addEventListener("mousemove", (event) => {
     hoverFridgeText.style.display = "none";
     updateHoverTooltip(intersectsBanana, hoverBananaText);
     updateHoverTooltip(intersectsCherry, hoverCherryText);
-    updateHoverTooltip(intersectsGrape, hoverGrapeText);
+    updateHoverTooltip(intersectsApple, hoverAppleText);
   } else {
     updateHoverTooltip(intersectsFridge, hoverFridgeText);
     updateHoverTooltip(intersectsLightSwitch, hoverLightSwitchText);
@@ -397,7 +398,7 @@ window.addEventListener("mousemove", (event) => {
 });
 
 window.addEventListener("click", (event) => {
-  if (!lightSwitch || !fridge || !banana || !cherry || !grape) return; // return if objects not loaded
+  if (!lightSwitch || !fridge || !banana || !cherry || !apple) return; // return if objects not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -456,13 +457,13 @@ window.addEventListener("click", (event) => {
       window.location.replace("/pages/cherry.html");
     }
 
-    const grapeIntersect = raycaster.intersectObject(grape, true);
+    const appleIntersect = raycaster.intersectObject(apple, true);
     if (
-      grapeIntersect.length > 0 &&
-      grapeMesh.includes(grapeIntersect[0].object)
+      appleIntersect.length > 0 &&
+      appleMesh.includes(appleIntersect[0].object)
     ) {
-      // grape clicked
-      window.location.replace("/pages/grape.html");
+      // apple clicked
+      window.location.replace("/pages/apple.html");
     }
   }
 

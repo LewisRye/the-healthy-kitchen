@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-// load information about grape
+// load information about apple
 async function getData() {
-  const url = "http://localhost:3000/food/grape";
+  const url = "http://localhost:3000/food/apple";
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -77,23 +77,23 @@ const rimLight = new THREE.DirectionalLight(0xffffff, 0.7);
 rimLight.position.set(0, 5, -10);
 scene.add(rimLight);
 
-let grape;
+let apple;
 let wireframeEnabled = false;
 
 const loader = new GLTFLoader();
 
-const grapeMesh = [];
+const appleMesh = [];
 loader.load(
-  "/models/grape.gltf",
+  "/models/apple.glb",
   (gltf) => {
-    grape = gltf.scene;
-    grape.scale.set(10, 10, 10);
-    grape.position.set(0, 0, 0);
-    scene.add(grape);
+    apple = gltf.scene;
+    apple.scale.set(4, 4, 4);
+    apple.position.set(0, 0, 0);
+    scene.add(apple);
 
-    grape.traverse((child) => {
+    apple.traverse((child) => {
       if (child.isMesh) {
-        grapeMesh.push(child);
+        appleMesh.push(child);
         child.castShadow = true;
         child.receiveShadow = true;
       }
@@ -105,6 +105,7 @@ loader.load(
   }
 );
 
+camera.position.y = 100;
 camera.position.z = 150;
 
 // toggle wireframe button
@@ -118,9 +119,9 @@ document.getElementById("btnToggleWireframe").addEventListener("click", () => {
 });
 
 function animate() {
-  if (!grape) return;
+  if (!apple) return;
 
-  grape.rotation.y += 0.001;
+  apple.rotation.y += 0.001;
   controls.update();
   renderer.render(scene, camera);
 }

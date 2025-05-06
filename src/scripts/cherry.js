@@ -105,6 +105,7 @@ loader.load(
   }
 );
 
+camera.position.y = 100;
 camera.position.z = 150;
 
 // toggle wireframe button
