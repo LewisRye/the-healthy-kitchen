@@ -1,12 +1,14 @@
-# Healthy Kitchen
+# The Healthy Kitchen
 
-### Getting Started
+### Installing Dependencies
 
-Getting started is easy, just run
+To install dependencies, just run:
 
 ```bash
 npm i
 ```
+
+### Run the Frontend
 
 For the frontend, run:
 
@@ -14,10 +16,12 @@ For the frontend, run:
 npx vite
 ```
 
-For the server, in a separate terminal, run:
+### Run the Backend
+
+For the server, run:
 
 ```bash
 node server
 ```
 
-Once the server is running, you will be able to visit the website at `http://localhost:5173/index.html`
+> Once the server is running, you will be able to visit the website at `http://localhost:5173/`
