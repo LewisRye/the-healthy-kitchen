@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Healthy Kitchen</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
-          crossorigin="anonymous"
-        />
-        <style>
-          body {
-            overflow-x: hidden;
-          }
-        </style>
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Healthy Kitchen</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+  </head>
   <body>
     <div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="../index.html"
           ><strong>The Healthy Kitchen: </strong>Learn about nutritious food</a
         >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarText"
+        aria-controls="navbarText"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
@@ -42,7 +37,7 @@
             <a class="nav-link" href="/pages/about.html">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#">Cut</a>
+            <a class="nav-link" href="/pages/cut.html">Cut</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -72,7 +67,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/pages/statement.html">Statement of Originality</a>
+            <a class="nav-link active" href="#">Statement of Originality</a>
           </li>
           <li class="nav-item">
             <a
@@ -89,19 +84,22 @@
       </div>
     </nav>
 
-    <div class="container-fluid bg-dark py-2">
-      <div class="d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-primary" id="btnToggleWireframe">
-          Toggle Wireframe
-        </button>
+    <div class="container p-5">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Statement of Originality</h5>
+          <p>
+            This is a statement of originality for the coursework submission for
+            the 'Web 3D Applications' module. The work presented here is my own
+            and has not been submitted for any other assessment.
+          </p>
+          <p>
+            All 3D models, animations, and sound effects used in this project
+            are either created by me or sourced from free resources with proper
+            attribution.
+          </p>
+        </div>
       </div>
-    </div>
-
-    <div
-        id="three-container"
-        class="flex-grow-1 d-flex justify-content-center position-relative"
-    >
-        <script type="module" src="/src/scripts/cut.js"></script>
     </div>
 
     <!-- for footer -->
