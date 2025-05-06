@@ -153,7 +153,7 @@ window.addEventListener("click", (event) => {
       action.reset();
       action.setLoop(THREE.LoopOnce);
       action.clampWhenFinished = true;
-      action.timeScale = 1;
+      action.timeScale = 2;
       action.play();
     }
     cutComplete = true;

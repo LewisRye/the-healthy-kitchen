@@ -10,10 +10,15 @@
       integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
       crossorigin="anonymous"
     />
+    <style>
+      img {
+        margin-bottom: 2vh;
+      }
+    </style>
   </head>
   <body>
     <div class="container-fluid">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
         <a class="navbar-brand" href="../index.html">
           <div><strong>The Healthy Kitchen</strong></div>
           <small class="text-muted">Learn about nutritious food</small>
@@ -96,134 +101,215 @@
       </section>
 
       <section class="mb-5">
-        <h2 class="mb-3">3D Models</h2>
-
-          <div class="card h-100 text-bg-dark">
-            <div class="card-body">
-              <h4 class="card-title">Fridge</h4>
-              <p>
-                The fridge opens and closes interactively, revealing foods
-                inside. Animations and sound effects enhance realism. There
-                is also glass shelves inside the fridge that are transparent,
-                making it a more detailed mesh with realistic properties.
-              </p>
-            </div>
-          </div>
-
-          <div class="card h-100 text-bg-dark">
-            <div class="card-body">
-              <h4 class="card-title">Banana</h4>
-              <p>
-                A textured 3D model of a banana rotates including hover tooltips
-                and a custom painted texture in Blender. The texture of the banana
-                has been drawn to include slight brown spots, enhancing realism
-                involving the ripeness of the banana.
-              </p>
-            </div>
-          </div>
-
-          <div class="card h-100 text-bg-dark">
-            <div class="card-body">
-              <h4 class="card-title">Milk</h4>
-              <p>
-                The cherry model demonstrates simple clustering and rotation
-                effects using jQuery.
-              </p>
-            </div>
-          </div>
-
-          <div class="card h-100 text-bg-dark">
-            <div class="card-body">
-              <h4 class="card-title">Apple</h4>
-              <p>
-                Apple clusters can be zoomed and spun using mouse interaction,
-                giving a tactile experience.
-              </p>
-            </div>
-          </div>
-      </section>
-
-      <section class="mb-5">
-        <h2 class="mb-3">Design & Integration</h2>
+        <h2 class="mb-3">Accessibility</h2>
         <p>
-          Upon loading the site, the user enters a kitchen with
-          interactive objects. The user can look around and interact
-          with objects and go to different scenes. Bootstrap ensures
-          responsiveness across devices, such as mobile, and consistent
-          UI appearance/behaviour.
+          Accessibility has been considered for this website. An example of this is
+          the responsive design, that UI when you resize the window or use the 
+          page on mobile. The friendly design means this website can run on nearly
+          any device. For disability issues, I have made buttons very large with an
+          appropriate colour scheme for people with vision issues.
+        </p>
+      </section>
+      
+      <section class="mb-5">
+        <h2 class="mb-3">Design</h2>
+        <p>
+          To ensure maintainability, scalability, and clear separation of concerns,
+          this application follows the Model-View-Controller (MVC) design pattern.
+        </p>
+        <h4>Model - Backend API</h4>
+        <p>
+          ExpressJS was chosen for its simplicity and minimalistic design
+          which is perfect for creating small APIs quickly. The point
+          of this API is to serve nutrition information about the different
+          foods. This backend API communicates with an SQLite database to store
+          the data, and is accessed in the frontend via HTTP GET requests.
+        </p>
+        <img src="/images/nutritional-information.png" style="width: 33%;">
+        <img src="/images/api.png" style="width: 33%;">
+        <img src="/images/http-get.png" style="width: 33%;">
+
+        <h4>View - Bootstrap</h4>
+        <p>
+          Bootstrap 5 was selected for its robust grid system. The consistent
+          dark theme enhances readability and visual appeal, while Bootstrap's
+          grid system ensure that the application looks and functions well on
+          all devices, including on mobile.
+        </p>
+        <img src="/images/mobile.png" style="width: 25%;">
+
+        <h4>Controller - Three.JS</h4>
+        <p>
+          Three.JS was selected as the core rendering engine for the 3D graphics
+          in the application. The decision to use Three stems from its performance
+          and ease of use to create good 3D scenes with animations.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="mb-3">Interaction & Implementation</h2>
-        <p>
-          Interactive elements were tested thoroughly, including clickable
-          animations and UI feedback. Examples of interactivity include the fridge,
-          which opens and closes, the light switch, which can be toggled by the user,
-          and the cupboards which take the user to a chopping board scene where they
-          can cut open a banana.
+        <h2 class="mb-4">3D Models</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100 text-bg-dark">
+              <div class="card-body">
+                <h4 class="card-title">Fridge</h4>
+                <p>
+                  The fridge opens and closes interactively, revealing foods inside.
+                  Animations and sound effects enhance realism. There are also glass shelves
+                  inside the fridge that are transparent, making it a more detailed mesh
+                  with realistic properties.
+                </p>
+                <img src="/images/fridge-open.png" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-6">
+            <div class="card h-100 text-bg-dark">
+              <div class="card-body">
+                <h4 class="card-title">Apple</h4>
+                <p>
+                  The apple model can be zoomed and spun using mouse interaction,
+                  giving a tactile experience.
+                </p>
+                <img src="/images/apple.png" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-6">
+            <div class="card h-100 text-bg-dark">
+              <div class="card-body">
+                <h4 class="card-title">Milk</h4>
+                <p>
+                  A carton of milk that contains drawn textures. There is a separate
+                  lid that makes the carton look more realistic.
+                </p>
+                <img src="/images/milk.png" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-6">
+            <div class="card h-100 text-bg-dark">
+              <div class="card-body">
+                <h4 class="card-title">Banana</h4>
+                <p>
+                  A textured 3D model of a banana. The texture of the banana
+                  has been drawn in Blender to include slight brown spots,
+                  enhancing realism involving the ripeness of the banana.
+                  The banana can also be cut in half by the user, increasing
+                  interactivity.
+                </p>
+                <img src="/images/banana-cut.png" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>      
+
+      <section class="mb-5">
+        <h2 class="mb-3">3D App Implementation</h2>
+        <h4>Design Quality and Usability</h4>
+        <p>The site makes use of Bootstrap's row and column grid layout
+          to ensure responsiveness across devices, such as mobile, and consistent
+          UI appearance/behaviour. Bootstrap and CSS are also used to style the
+          buttons and navigation bars. The site is made more usable by the
+          tooltips that are shown when you hover over something that is clickable.
         </p>
-        <img src="/images/hover-lights.png" style="width: 33%;">
-        <img src="/images/fridge-open.png" style="width: 33%;">
-        <img src="/images/banana-cut.png" style="width: 33%;">
-      </section>
 
-      <section class="mb-5">
-        <h2 class="mb-3">Testing & Feedback</h2>
-        <div
-          class="alert alert-danger text-white"
-          role="alert"
-          style="background-color: #ff0000"
-        >
-          “I don't like your site”
-        </div>
+        <h4>Animations</h4>
+        <p>
+          Animations can be triggered through clicking objects. For example, the
+          fridge will open when clicked, and the banana will cut in half. There
+          are also buttons such as 'Toggle Wireframe' that the user can use to
+          see the wireframe version of the models.
+        </p>
+        <img src="/images/banana-cut.png" style="width: 50%;">
 
-        <div
-          class="alert alert-success text-white"
-          role="alert"
-          style="background-color: #28a745"
-        >
-          “Animations are amazing”
-        </div>
-      </section>
+        <h4>Textures</h4>
+        <p>
+          Another interesting feature is the 'Redecorate' button, this switches
+          the textures being used on the walls, floor and door and simulates a
+          total redecoration of the kitchen. 
+        </p>
+        <img src="/images/texture1.png" style="width: 33%;">
+        <img src="/images/texture2.png" style="width: 33%;">
+        <img src="/images/texture3.png" style="width: 33%;">
 
-      <section class="mb-5">
-        <h2 class="mb-3">Audio</h2>
+        <h4>Audio and Sound Effects</h4>
         <p>
           All sound effects are copyright-free and sourced from
           <a href="https://www.mixkit.co/free-sound-effects/" class="text-info"
             >Mixkit</a
-          >.
+          >. The sound effects I have chosen to include are played when opening and
+          closing the fridge, as well as the light switch being toggled, you can try
+          out these sounds by clicking the fridge or the light switch.
         </p>
-        <p>The sound effects I have chosen to include are for the fridge opening/closing
-          and the light switch being toggled, you can try out these sounds by clicking
-          the fridge or the light switch.</p>
+
+        <h4>Lighting</h4>
+        <p>
+          Lighting is also controlled by buttons. There is a light switch found
+          on the wall that can turn the scene from day into night, and this turns
+          off the sunlight, and turns on a spotlight in the ceiling and puts stars
+          in the sky outside, simulating night time.
+        </p>
+        <img src="/images/day.png">
+        <img src="/images/night.png">
+
+        <h4>Interaction with 3D Models</h4>
+        <p>JavaScript is used to manipulate the 3D models, this is through the camera
+          panning when the user moves the mouse, and when animations are triggered upon
+          clicking an object.
+        </p>
       </section>
 
-      <section>
-        <h2 class="mb-3">Going Beyond</h2>
-        <h4>Models</h4>
+      <section class="mb-5">
+        <h2 class="mb-3">Interesting Features</h2>
+        <h4>Drawing Model Textures</h4>
         <p>
           The models I have created in Blender are of sufficient complexity, with
-          correct roughness and metallic properties. I have even created the
+          correct roughness and metallic properties. I have created the
           textures myself using the 'Texture Paint' tool.
         </p>
-        <h4>GitHub</h4>
+        <img src="/images/texture-paint.png" style="width: 50%;">
+
+        <h4>GitHub Archive</h4>
         <p>
           This project is version-controlled using Git, with full commit history
-          available on the GitHub repository linked in the navbar.
+          available on the <a
+          href="https://www.github.com/lewisrye/the-healthy-kitchen"
+          target="_blank">GitHub repository</a>.
         </p>
-        <h4>Bootstrap</h4>
-        <p>
-          All layout and UI elements utilize Bootstrap 5.3, ensuring a
-          consistent dark theme and accessibility.
-        </p>
+
         <h4>jQuery</h4>
         <p>
           jQuery handles dynamic interactivity such as showing and hiding
           buttons during interactions, an example of this is the 'Close Fridge'
           button that only shows when the fridge is open.
         </p>
+      </section>
+
+      <section class="mb-5">
+        <h2 class="mb-3">Testing</h2>
+        <h4>Interaction</h4>
+        <p>
+          Interactive elements were tested thoroughly, and are working correctly.
+          Examples of interactivity include the fridge, which opens and closes,
+          the light switch, which can be toggled by the user, and the cupboards
+          which take the user to a chopping board scene where they can cut open
+          a banana.
+        </p>
+        <p>Upon testing the opening of the fridge, I found that you could click
+          other elements that should not be clicked, such as the light switch.
+          This was fixed by disabling all other buttons when the fridge was open.
+        </p>
+        <p>Found below is a testing video that shows all working interactions.
+        </p>
+        <video width="100%" controls>
+          <source src="/videos/testing.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
       </section>
     </div>
 

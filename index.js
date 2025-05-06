@@ -112,7 +112,7 @@ loader.load(
   (gltf) => {
     banana = gltf.scene;
     banana.position.set(0, 1.5, -4.5);
-    banana.scale.set(0.02, 0.02, 0.02);
+    banana.scale.set(0.015, 0.015, 0.015);
     banana.rotateX(35 * (Math.PI / 180));
     banana.rotateY(90 * (Math.PI / 180));
     banana.rotateZ(70 * (Math.PI / 180));
