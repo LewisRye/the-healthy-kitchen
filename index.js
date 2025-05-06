@@ -87,7 +87,7 @@ loader.load(
   (gltf) => {
     apple = gltf.scene;
     apple.scale.set(0.015, 0.015, 0.015);
-    apple.position.set(0, 0.1, -4.5);
+    apple.position.set(-0.35, 0.7, -4.33);
     scene.add(apple);
 
     // for raycasting
@@ -113,8 +113,9 @@ loader.load(
     banana = gltf.scene;
     banana.position.set(0, 1.5, -4.5);
     banana.scale.set(0.02, 0.02, 0.02);
-    banana.rotateX(45 * (Math.PI / 180));
+    banana.rotateX(35 * (Math.PI / 180));
     banana.rotateY(90 * (Math.PI / 180));
+    banana.rotateZ(70 * (Math.PI / 180));
     scene.add(banana);
 
     // for raycasting
@@ -132,20 +133,21 @@ loader.load(
   }
 );
 
-let cherry;
-const cherryMesh = [];
+let milk;
+const milkMesh = [];
 loader.load(
-  "/models/cherry.gltf",
+  "/models/milk.glb",
   (gltf) => {
-    cherry = gltf.scene;
-    cherry.scale.set(0.09, 0.09, 0.09);
-    cherry.position.set(0, 0.75, -4.5);
-    scene.add(cherry);
+    milk = gltf.scene;
+    milk.scale.set(0.07, 0.07, 0.07);
+    milk.position.set(0.25, 1, -4.33);
+    milk.rotateY(33 * (Math.PI / 180));
+    scene.add(milk);
 
     // for raycasting
-    cherry.traverse((child) => {
+    milk.traverse((child) => {
       if (child.isMesh) {
-        cherryMesh.push(child);
+        milkMesh.push(child);
         child.castShadow = true;
         child.receiveShadow = true;
       }
@@ -273,6 +275,29 @@ lightSwitch.traverse((child) => {
   }
 });
 
+// add stars
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 10000;
+const positions = [];
+
+for (let i = 0; i < starCount; i++) {
+  const x = (Math.random() - 0.5) * 2000;
+  const y = (Math.random() - 0.5) * 2000;
+  const z = (Math.random() - 0.5) * 2000;
+  positions.push(x, y, z);
+}
+
+starGeometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(positions, 3)
+);
+const starMaterial = new THREE.PointsMaterial({
+  color: 0xffffff,
+  size: 0.7,
+  sizeAttenuation: true,
+});
+const stars = new THREE.Points(starGeometry, starMaterial);
+
 scene.add(floor);
 scene.add(backWall);
 scene.add(rightWall);
@@ -283,6 +308,7 @@ scene.add(cupboard4);
 scene.add(door);
 scene.add(handle);
 scene.add(lightSwitch);
+scene.add(stars);
 
 const textureList = ["wood", "stone", "tiles"]; // all textures
 // begin with the texture at the back of the list, this is to
@@ -329,26 +355,6 @@ hoverFridgeText.style.borderRadius = "5px";
 hoverFridgeText.innerHTML = "Open Fridge";
 document.body.appendChild(hoverFridgeText);
 
-const hoverBananaText = document.createElement("div");
-hoverBananaText.style.display = "none";
-hoverBananaText.style.position = "absolute";
-hoverBananaText.style.color = "white";
-hoverBananaText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-hoverBananaText.style.padding = "5px";
-hoverBananaText.style.borderRadius = "5px";
-hoverBananaText.innerHTML = "View Banana Info";
-document.body.appendChild(hoverBananaText);
-
-const hoverCherryText = document.createElement("div");
-hoverCherryText.style.display = "none";
-hoverCherryText.style.position = "absolute";
-hoverCherryText.style.color = "white";
-hoverCherryText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-hoverCherryText.style.padding = "5px";
-hoverCherryText.style.borderRadius = "5px";
-hoverCherryText.innerHTML = "View Cherry Info";
-document.body.appendChild(hoverCherryText);
-
 const hoverAppleText = document.createElement("div");
 hoverAppleText.style.display = "none";
 hoverAppleText.style.position = "absolute";
@@ -359,8 +365,28 @@ hoverAppleText.style.borderRadius = "5px";
 hoverAppleText.innerHTML = "View Apple Info";
 document.body.appendChild(hoverAppleText);
 
+const hoverBananaText = document.createElement("div");
+hoverBananaText.style.display = "none";
+hoverBananaText.style.position = "absolute";
+hoverBananaText.style.color = "white";
+hoverBananaText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverBananaText.style.padding = "5px";
+hoverBananaText.style.borderRadius = "5px";
+hoverBananaText.innerHTML = "View Banana Info";
+document.body.appendChild(hoverBananaText);
+
+const hoverMilkText = document.createElement("div");
+hoverMilkText.style.display = "none";
+hoverMilkText.style.position = "absolute";
+hoverMilkText.style.color = "white";
+hoverMilkText.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+hoverMilkText.style.padding = "5px";
+hoverMilkText.style.borderRadius = "5px";
+hoverMilkText.innerHTML = "View Milk Info";
+document.body.appendChild(hoverMilkText);
+
 window.addEventListener("mousemove", (event) => {
-  if (!lightSwitch || !fridge || !banana || !cherry || !apple) return; // return if objects not loaded
+  if (!lightSwitch || !fridge || !apple || !banana || !milk) return; // return if objects not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -372,7 +398,7 @@ window.addEventListener("mousemove", (event) => {
   const intersectsCupboard = raycaster.intersectObject(cupboard1, true);
   const intersectsFridge = raycaster.intersectObject(fridge, true);
   const intersectsBanana = raycaster.intersectObject(banana, true);
-  const intersectsCherry = raycaster.intersectObject(cherry, true);
+  const intersectsMilk = raycaster.intersectObject(milk, true);
   const intersectsApple = raycaster.intersectObject(apple, true);
 
   function updateHoverTooltip(intersects, element) {
@@ -388,7 +414,7 @@ window.addEventListener("mousemove", (event) => {
   if (fridgeOpen) {
     hoverFridgeText.style.display = "none";
     updateHoverTooltip(intersectsBanana, hoverBananaText);
-    updateHoverTooltip(intersectsCherry, hoverCherryText);
+    updateHoverTooltip(intersectsMilk, hoverMilkText);
     updateHoverTooltip(intersectsApple, hoverAppleText);
   } else {
     updateHoverTooltip(intersectsFridge, hoverFridgeText);
@@ -398,7 +424,7 @@ window.addEventListener("mousemove", (event) => {
 });
 
 window.addEventListener("click", (event) => {
-  if (!lightSwitch || !fridge || !banana || !cherry || !apple) return; // return if objects not loaded
+  if (!lightSwitch || !fridge || !banana || !milk || !apple) return; // return if objects not loaded
 
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -449,13 +475,13 @@ window.addEventListener("click", (event) => {
       window.location.replace("/pages/banana.html");
     }
 
-    const cherryIntersect = raycaster.intersectObject(cherry, true);
+    const milkIntersect = raycaster.intersectObject(milk, true);
     if (
-      cherryIntersect.length > 0 &&
-      cherryMesh.includes(cherryIntersect[0].object)
+      milkIntersect.length > 0 &&
+      milkMesh.includes(milkIntersect[0].object)
     ) {
-      // cherry clicked
-      window.location.replace("/pages/cherry.html");
+      // milk clicked
+      window.location.replace("/pages/milk.html");
     }
 
     const appleIntersect = raycaster.intersectObject(apple, true);

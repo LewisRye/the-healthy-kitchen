@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-// load information about cherry
+// load information about milk
 async function getData() {
-  const url = "http://localhost:3000/food/cherry";
+  const url = "http://localhost:3000/food/milk";
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -20,12 +20,10 @@ async function getData() {
     document.getElementById("description").innerHTML = json.description;
     document.getElementById("fat").innerHTML = `${json.fat}g`;
     document.getElementById("fibre").innerHTML = `${json.fibre}g`;
-    document.getElementById("is_gluten_free").innerHTML = json.is_gluten_free
-      ? "✅"
-      : "❌";
-    document.getElementById("is_vegan").innerHTML = json.is_gluten_free
-      ? "✅"
-      : "❌";
+    document.getElementById("is_gluten_free").innerHTML =
+      json.is_gluten_free == 1 ? "✅" : "❌";
+    document.getElementById("is_vegan").innerHTML =
+      json.is_vegan == 1 ? "✅" : "❌";
     document.getElementById("protein").innerHTML = `${json.protein}g`;
     document.getElementById("sugar").innerHTML = `${json.sugar}g`;
     document.getElementById("type").innerHTML = json.type;
@@ -84,7 +82,7 @@ const loader = new GLTFLoader();
 
 const cherryMesh = [];
 loader.load(
-  "/models/cherry.gltf",
+  "/models/milk.glb",
   (gltf) => {
     cherry = gltf.scene;
     cherry.scale.set(20, 20, 20);

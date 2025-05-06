@@ -20,12 +20,10 @@ async function getData() {
     document.getElementById("description").innerHTML = json.description;
     document.getElementById("fat").innerHTML = `${json.fat}g`;
     document.getElementById("fibre").innerHTML = `${json.fibre}g`;
-    document.getElementById("is_gluten_free").innerHTML = json.is_gluten_free
-      ? "✅"
-      : "❌";
-    document.getElementById("is_vegan").innerHTML = json.is_gluten_free
-      ? "✅"
-      : "❌";
+    document.getElementById("is_gluten_free").innerHTML =
+      json.is_gluten_free == 1 ? "✅" : "❌";
+    document.getElementById("is_vegan").innerHTML =
+      json.is_vegan == 1 ? "✅" : "❌";
     document.getElementById("protein").innerHTML = `${json.protein}g`;
     document.getElementById("sugar").innerHTML = `${json.sugar}g`;
     document.getElementById("type").innerHTML = json.type;

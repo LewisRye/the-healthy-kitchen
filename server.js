@@ -90,19 +90,19 @@ db.serialize(() => {
           fibre, sugar, vitamins, is_vegan, is_gluten_free, countries
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          "Cherry",
-          "Fruit",
-          "A red fruit",
-          50.0,
-          12,
-          1.1,
-          0.3,
-          1.6,
-          8.0,
-          "fibre, potassium, vitamin C",
+          "Milk",
+          "Dairy",
+          "Milk is a nutrient-rich liquid produced by cows to nourish their young. It contains essential nutrients that support growth and bone health.",
+          42.0,
+          5,
+          3.4,
+          1.0,
+          0.0,
+          5.0,
+          "calcium, phosphorous, potassium",
+          false,
           true,
-          true,
-          "Anatolia",
+          "India, United States, Pakistan, China, Brazil",
         ]
       );
     }
